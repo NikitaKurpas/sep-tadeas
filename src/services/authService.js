@@ -8,5 +8,8 @@ export function isLoggedIn () {
 
 export function logIn ({username, password}, done) {
   state.isAuthenticated = true
-  done(null, true)
+
+
+
+  return done(null, true)
 }
