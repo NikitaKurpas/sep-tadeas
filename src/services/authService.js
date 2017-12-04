@@ -1,19 +1,21 @@
-const state = {
-  isAuthenticated: localStorage.getItem('isLoggedIn') || false
-}
-
 export function isLoggedIn () {
-  return state.isAuthenticated
+  return localStorage.getItem('isLoggedIn') || false
 }
 
 export function logIn ({email, password}, done) {
-  state.isAuthenticated = true
   localStorage.setItem('isLoggedIn', true)
+  localStorage.setItem('email', email)
 
   return done(null, true)
 }
 
 export function logOut () {
-  state.isAuthenticated = false
   localStorage.clear()
+}
+export function getUsername () {
+  return localStorage.getItem('email') || 'Unknown User'
+}
+
+export function getToken () {
+  return localStorage.getItem('token') || ''
 }

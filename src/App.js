@@ -1,21 +1,30 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
-import logo from './logo.svg'
-import './App.css'
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom'
+import { isLoggedIn, logOut, getUsername } from './services/authService'
+import PrivateRoute from './components/PrivateRoute'
+import Navbar from './components/Navbar'
 import LogIn from './pages/LogIn'
 import Dashboard from './pages/Dashboard'
-import PrivateRoute from './components/PrivateRoute'
-import { isLoggedIn } from './services/authService'
-import Task from './pages/TaskDetail'
+import TaskDetail from './pages/TaskDetail'
+import './App.css'
+import logo from './logo.svg'
 
 class App extends Component {
   render () {
     return (
       <Router>
         <div>
-          <Route path='/login' render={props => isLoggedIn() ? <Redirect to='/'/> : <LogIn {...props}/>}/>
-          <PrivateRoute path='/' exact component={Dashboard}/>
-          <PrivateRoute path='/tasks/:id' componen={Task}/>
+          <Route path='/' exact render={() => <Redirect to='/tasks'/>} />
+          <Route path='/login' render={props => isLoggedIn() ? <Redirect to='/tasks'/> : <LogIn {...props}/>}/>
+          <Route path='/logout' render={() => {
+            logOut();
+            return <Redirect to='/login'/>
+          }}/>
+          <PrivateRoute path='/tasks' render={props => (
+            <Navbar username={getUsername()} {...props}/>
+          )}/>
+          <PrivateRoute path='/tasks' exact component={Dashboard}/>
+          <PrivateRoute path='/tasks/:id' exact component={TaskDetail}/>
         </div>
         {/* <div className='App'> */}
         {/* <header className='App-header'> */}

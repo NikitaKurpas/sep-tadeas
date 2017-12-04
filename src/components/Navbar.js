@@ -1,6 +1,7 @@
 import React from 'react'
+import { Route, Link } from 'react-router-dom'
 
-const Navbar = ({username, buttons}) => (
+const Navbar = ({username}) => (
   <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
     <div className='container'>
       {/*<a className='navbar-brand' href='#'>TADEAS</a>*/}
@@ -9,15 +10,23 @@ const Navbar = ({username, buttons}) => (
       </button>
 
       <div className='collapse navbar-collapse'>
-        <ul className='navbar-nav mr-auto'>
-          {(buttons || []).map(button => (
+        {/*<Route path='/tasks' exact render={() => (*/}
+          {/*<ul className='navbar-nav mr-auto'>*/}
+            {/*<li className='nav-item active'>*/}
+              {/*<Link to='/tasks/create' className='btn btn-primary'>Create task</Link>*/}
+            {/*</li>*/}
+          {/*</ul>*/}
+        {/*)}/>*/}
+        <Route path='/tasks/:what' render={() => (
+          <ul className='navbar-nav mr-auto'>
             <li className='nav-item active'>
-              <a className='nav-link' href={button.link}>{button.label}</a>
+              <Link to='/' className='btn btn-primary'>Task list</Link>
             </li>
-          ))}
-        </ul>
+          </ul>
+        )}/>
       </div>
-      <span className='my-0 my-md-2' style={{color: '#fff'}}>{username}</span>
+      <span className='my-0 my-md-2 mr-md-2' style={{color: '#fff'}}>{username}</span>
+      <Link to='/logout' className='btn btn-outline-danger my-2 my-sm-0'>Log out</Link>
     </div>
   </nav>
 )

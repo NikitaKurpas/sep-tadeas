@@ -1,0 +1,21 @@
+.TaskDetail {
+  margin-top: 40px;
+}
+
+.TaskDetail .upload-form {
+  margin-top: 40px;
+}
+
+.TaskDetail .description {
+  padding: 20px;
+  border: 1px #ccc solid;
+  background: #ffffff;
+}
+
+.TaskDetail .file-list {
+  padding: 20px;
+  border: 1px #ccc solid;
+  height: 300px;
+  max-width: 400px;
+  background: #ffffff;
+}

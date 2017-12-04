@@ -1,0 +1,19 @@
+.Dashboard {
+  padding-top: 40px;
+}
+
+.Dashboard .table {
+  margin-top: 20px;
+}
+
+.Dashboard table, th, tr, td {
+  border-color: #ccc !important;
+}
+
+.Dashboard tbody tr {
+  cursor: pointer;
+}
+
+.Dashboard thead th {
+  cursor: pointer;
+}
