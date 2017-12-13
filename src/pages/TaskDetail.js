@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './TaskDetail.css'
 import TaskHistory from '../components/TaskHistory';
+import { Button } from 'react-bootstrap'
 
 class TaskDetail extends Component {
   state = {
@@ -36,7 +37,7 @@ class TaskDetail extends Component {
         </div>
         <div className="col-6 description">{task.definition}</div>
       </div>
-
+      <Button bsStyle="info">Potvrdit odevzdani</Button>
     </div>
   }
 }
