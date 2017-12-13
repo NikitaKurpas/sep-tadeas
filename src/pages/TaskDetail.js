@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './TaskDetail.css'
+import TaskHistory from '../components/TaskHistory';
 
 class TaskDetail extends Component {
   state = {
@@ -10,12 +11,12 @@ class TaskDetail extends Component {
       issueDate: '1st January 2018',
       active: true,
       definition: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin mi justo, ultricies ac porttitor ut, porttitor pharetra velit. Curabitur lacinia nulla eu risus tincidunt porta. Nam id turpis purus. Phasellus id eros nec risus placerat viverra et vel augue. Sed porttitor libero sapien, nec convallis diam consectetur in. Praesent iaculis ante eget odio consequat egestas. Etiam mattis gravida eros. Pellentesque id condimentum quam. Nullam scelerisque diam nec neque cursus ornare.\n' +
-      '\n' +
-      'Nulla sit amet tellus ut odio efficitur tristique ac a purus. Nullam quis dictum lorem, ac aliquet mi. Phasellus laoreet rhoncus augue eget posuere. Quisque mauris lorem, bibendum quis magna vitae, iaculis bibendum mi. Sed mattis eu eros ac luctus. Mauris vel commodo turpis. Maecenas luctus sem dolor, ac facilisis mi tincidunt ut.'
+        '\n' +
+        'Nulla sit amet tellus ut odio efficitur tristique ac a purus. Nullam quis dictum lorem, ac aliquet mi. Phasellus laoreet rhoncus augue eget posuere. Quisque mauris lorem, bibendum quis magna vitae, iaculis bibendum mi. Sed mattis eu eros ac luctus. Mauris vel commodo turpis. Maecenas luctus sem dolor, ac facilisis mi tincidunt ut.'
     }
   }
   render() {
-    const {task} = this.state
+    const { task } = this.state
     return <div className='TaskDetail container'>
       <div className="row">
         <div className="col-6">
@@ -25,11 +26,12 @@ class TaskDetail extends Component {
           <form className='upload-form'>
             <div className="form-group">
               <label htmlFor="file">Upload file(s)</label>
-              <input id="file" name="file" type="file" className="form-control-file" multiple/>
+              <input id="file" name="file" type="file" className="form-control-file" multiple />
             </div>
           </form>
-          <div className="file-list">
-
+          {/* <div className="file-list"> */}
+          <div>
+            <TaskHistory />
           </div>
         </div>
         <div className="col-6 description">{task.definition}</div>

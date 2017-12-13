@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import './Dashboard.css'
+import {Table} from 'react-bootstrap' 
 
 class Dashboard extends Component {
   state = {
@@ -19,7 +20,7 @@ class Dashboard extends Component {
       active: false,
       definition: ''
     }],
-    sortOrder: 0,
+    sortOrder: 1,
     sortProp: 'name',
     search: ''
   }
@@ -66,7 +67,7 @@ class Dashboard extends Component {
                onChange={this.handleSearch}/>
         {/*<button type="submit" className='btn btn-outline-primary'>Search</button>*/}
       </form>
-      <table className='table table-hover table-bordered'>
+      <Table className='table table-hover table-bordered'>
         <thead className='thead-inverse'>
           <tr>
             <th onClick={this.sortData('name')}>Task name</th>
@@ -87,7 +88,7 @@ class Dashboard extends Component {
           </tr>
         ))}
         </tbody>
-      </table>
+      </Table>
     </div>
   }
 }
