@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './TaskDetail.css'
 import TaskHistory from '../components/TaskHistory';
+import { Button, Row, Col } from 'react-bootstrap';
 
 class TaskDetail extends Component {
   state = {
@@ -17,25 +18,40 @@ class TaskDetail extends Component {
   }
   render() {
     const { task } = this.state
+
+    var isTeacher = true; //TODO: dostat jako props na zaklade role, ovlinuje vykresleni
+
     return <div className='TaskDetail container'>
-      <div className="row">
-        <div className="col-6">
+      <Row>
+        <Col xs={12} md={6} sm={12}>
           <h2>{task.name}</h2>
           <h4>By {task.issuer}</h4>
           <h6>Issue Date: {task.issueDate}</h6>
-          <form className='upload-form'>
-            <div className="form-group">
-              <label htmlFor="file">Upload file(s)</label>
-              <input id="file" name="file" type="file" className="form-control-file" multiple />
-            </div>
-          </form>
+          {
+            isTeacher ? <div className="acceptTask">
+              <h4>Splněno zadání</h4>
+              <Button>Ano</Button>
+              <Button>Ne</Button>
+            </div> :
+              <form className='upload-form'>
+                <div className="form-group">
+                  <label htmlFor="file">Upload file(s)</label>
+                  <input id="file" name="file" type="file" className="form-control-file" multiple />
+                </div>
+              </form>
+          }
           {/* <div className="file-list"> */}
           <div>
             <TaskHistory />
+            {
+              isTeacher ?
+                <Button style={{ marginTop: '5px', marginBottom: '5px' }}>Vyhodnotit</Button> :
+                <Button style={{ marginTop: '5px', marginBottom: '5px' }}>Potvrdit odevzdani</Button>
+            }
           </div>
-        </div>
-        <div className="col-6 description">{task.definition}</div>
-      </div>
+        </Col>
+        <Col className="description" xs={10} md={6} sm={12}>{task.definition}</Col>
+      </Row>
 
     </div>
   }

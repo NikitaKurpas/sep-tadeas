@@ -8,7 +8,8 @@ const styles = {
         border: '1px #ccc solid',
         height: '300px',
         maxWidth: '400px',
-        background: '#ffffff'
+        background: '#ffffff',
+        overflowX: 'hidden',
     }
 }
 
@@ -53,28 +54,54 @@ const history = [
         name: "test_v4.zip",
         date: "1-12-2017"
     },
+    {
+        name: "test_v2.zip",
+        date: "2-12-2017"
+    },
+    {
+        name: "test_v4.zip",
+        date: "1-12-2017"
+    },
+    {
+        name: "test_v2.zip",
+        date: "6-12-2017"
+    },
+    {
+        name: "test_v4.zip",
+        date: "5-12-2017"
+    },
+    {
+        name: "test_v2.zip",
+        date: "2-12-2017"
+    },
+    {
+        name: "test_v4.zip",
+        date: "1-12-2017"
+    },
 ]
 
 class TaskHistory extends Component {
 
     render() {
         return (
-            <Table style={styles.table}>
-                <thead>
-                    <tr>
-                        <th>Název</th>
-                        <th>Datum</th>
-                        <th>Stáhnout</th>
-                    </tr>
-                </thead>
-                {
-                    history.map(version => {
-                        return (
-                            <tr><td>{version.name}</td><td> {version.date}</td><td><a href="#">stahnout</a></td></tr>
-                        )
-                    })
-                }
-            </Table>
+            <div style={styles.table}>
+                <Table >
+                    <thead>
+                        <tr>
+                            <th>Název</th>
+                            <th>Datum</th>
+                            <th>Stáhnout</th>
+                        </tr>
+                    </thead>
+                    {
+                        history.map(version => {
+                            return (
+                                <tr><td>{version.name}</td><td> {version.date}</td><td><a href="#">stahnout</a></td></tr>
+                            )
+                        })
+                    }
+                </Table>
+            </div>
         )
     }
 }
