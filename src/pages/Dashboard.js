@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import './Dashboard.css'
-import {Table} from 'react-bootstrap' 
+import {Table} from 'react-bootstrap'
+import api from '../services/api'
 
 class Dashboard extends Component {
   state = {
@@ -23,6 +24,14 @@ class Dashboard extends Component {
     sortOrder: 1,
     sortProp: 'name',
     search: ''
+  }
+
+  componentDidMount() {
+    api('/task')
+      .then(body => {
+        this.setState(Object.assign(this.state, {data: body}))
+      })
+      .catch(err => alert(err.message))
   }
 
   sortData = prop => event => {
@@ -48,6 +57,14 @@ class Dashboard extends Component {
 
   render () {
     let data = this.state.data;
+
+    // Intermediate state before retrieving data
+    if (!data || !data.length) {
+      return (
+        <div>Loading...</div>
+      )
+    }
+
     // filter
     if (this.state.search && this.state.search.length) {
       const val = this.state.search.toLowerCase();

@@ -1,25 +1,24 @@
 import React, { Component } from 'react'
 import './TaskDetail.css'
-import TaskHistory from '../components/TaskHistory';
-import { Button, Row, Col } from 'react-bootstrap';
+import TaskHistory from '../components/TaskHistory'
+import { Button, Row, Col } from 'react-bootstrap'
+import api from '../services/api'
 
 class TaskDetail extends Component {
-  state = {
-    task: {
-      id: 1,
-      name: 'Task #1',
-      issuer: 'Issuer A',
-      issueDate: '1st January 2018',
-      active: true,
-      definition: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin mi justo, ultricies ac porttitor ut, porttitor pharetra velit. Curabitur lacinia nulla eu risus tincidunt porta. Nam id turpis purus. Phasellus id eros nec risus placerat viverra et vel augue. Sed porttitor libero sapien, nec convallis diam consectetur in. Praesent iaculis ante eget odio consequat egestas. Etiam mattis gravida eros. Pellentesque id condimentum quam. Nullam scelerisque diam nec neque cursus ornare.\n' +
-        '\n' +
-        'Nulla sit amet tellus ut odio efficitur tristique ac a purus. Nullam quis dictum lorem, ac aliquet mi. Phasellus laoreet rhoncus augue eget posuere. Quisque mauris lorem, bibendum quis magna vitae, iaculis bibendum mi. Sed mattis eu eros ac luctus. Mauris vel commodo turpis. Maecenas luctus sem dolor, ac facilisis mi tincidunt ut.'
-    }
+  state = {}
+
+  componentDidMount() {
+    api(`/task/${this.props.match.params.id}`)
+      .then(body => Promise.all[body, api(`/delivery`)])
   }
+
   render() {
     const { task } = this.state
+    const { isTeacher = false } = this.props
 
-    var isTeacher = true; //TODO: dostat jako props na zaklade role, ovlinuje vykresleni
+    if (!task) {
+      return <div>Loading...</div>
+    }
 
     return <div className='TaskDetail container'>
       <Row>
@@ -40,7 +39,6 @@ class TaskDetail extends Component {
                 </div>
               </form>
           }
-          {/* <div className="file-list"> */}
           <div>
             <TaskHistory />
             {
