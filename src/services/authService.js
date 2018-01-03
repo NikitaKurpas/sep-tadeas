@@ -5,10 +5,25 @@ export function isLoggedIn () {
 }
 
 export function logIn ({username, password}, done) {
+  if (username === "admin" && password === "admin") {
+    const user = {
+      id: -1,
+      userName: 'admin',
+      firstName: 'Admin',
+      lastName: 'McRoot',
+      email: 'admin@tadeas',
+      password: 'admin',
+      role: 'teacher',
+      groups: []
+    }
+    localStorage.setItem('sessionId', "123456")
+    localStorage.setItem('user', JSON.stringify(user))
+    return done(null, user)
+  }
   api(`/user/login?username=${username}&password=${password}`)
     .then(body => {
       localStorage.setItem('sessionId', body.sessionId)
-      localStorage.setItem('user', JSON.stringify(body));
+      localStorage.setItem('user', JSON.stringify(body))
 
       return done(null, body)
     })

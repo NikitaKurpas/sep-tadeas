@@ -7,7 +7,7 @@ import LogIn from './pages/LogIn'
 import Dashboard from './pages/Dashboard'
 import TaskDetail from './pages/TaskDetail'
 import './App.css'
-import logo from './logo.svg'
+// import logo from './logo.svg'
 
 class App extends Component {
   render () {
