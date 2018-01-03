@@ -1,0 +1,38 @@
+{
+  "LogIn": {
+    "heading": "Please sign in",
+    "username": "Username",
+    "password": "Password",
+    "signIn": "Sign in",
+    "resetPassword": "Reset password"
+  },
+  "Navbar": {
+    "taskList": "Task list",
+    "logOut": "Log out"
+  },
+  "Dashboard": {
+    "searchPlaceholder": "Search",
+    "table": {
+      "name": "Task name",
+      "issuer": "Issuer",
+      "issueDate": "Issue date"
+    }
+  },
+  "TaskDetail": {
+    "by": "By",
+    "issueDate": "Issue date",
+    "teacher": {
+      "isTaskCompleted": "isTaskCompleted",
+      "yes": "Yes",
+      "no": "No",
+      "evaluate": "Evaluate"
+    },
+    "TaskHistory": {
+      "name": "Name",
+      "date": "Date",
+      "download": "Download"
+    },
+    "uploadButton": "Upload file",
+    "confirmSubmission": "Confirm submission"
+  }
+}

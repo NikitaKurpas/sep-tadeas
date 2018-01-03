@@ -1,26 +1,28 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import './Dashboard.css'
 import {Table} from 'react-bootstrap'
 import api from '../services/api'
+import i18n from '../services/i18n'
 
 class Dashboard extends Component {
   state = {
-    data: [{
-      id: 1,
-      name: 'Task #1',
-      issuer: 'A',
-      issueDate: '1st January',
-      active: true,
-      definition: ''
-    }, {
-      id: 1,
-      name: 'Task #2',
-      issuer: 'B',
-      issueDate: '2st January',
-      active: false,
-      definition: ''
-    }],
+//     data: [{
+//       id: 1,
+//       name: 'Task #1',
+//       issuer: 'A',
+//       issueDate: '1st January',
+//       active: true,
+//       definition: ''
+//     }, {
+//       id: 1,
+//       name: 'Task #2',
+//       issuer: 'B',
+//       issueDate: '2st January',
+//       active: false,
+//       definition: ''
+//     }],
     sortOrder: 1,
     sortProp: 'name',
     search: ''
@@ -59,9 +61,15 @@ class Dashboard extends Component {
     let data = this.state.data;
 
     // Intermediate state before retrieving data
-    if (!data || !data.length) {
+    if (!data) {
       return (
-        <div>Loading...</div>
+        <div className="container">Loading...</div>
+      )
+    }
+
+    if (!data.length) {
+      return (
+        <div className="container">No tasks</div>
       )
     }
 
@@ -79,7 +87,7 @@ class Dashboard extends Component {
       <form className='form-inline' onSubmit={this.search}>
         <input type="text"
                className="form-control mb-2 mr-sm-2 mb-sm-0"
-               placeholder='Search term'
+               placeholder={i18n('Dashboard.searchPlaceholder', 'Search term')}
                value={this.state.search}
                onChange={this.handleSearch}/>
         {/*<button type="submit" className='btn btn-outline-primary'>Search</button>*/}
@@ -87,9 +95,9 @@ class Dashboard extends Component {
       <Table className='table table-hover table-bordered'>
         <thead className='thead-inverse'>
           <tr>
-            <th onClick={this.sortData('name')}>Task name</th>
-            <th onClick={this.sortData('issuer')} width='300'>Issuer</th>
-            <th onClick={this.sortData('issueDate')} width='200'>Issue date</th>
+            <th onClick={this.sortData('name')}>{i18n('Dashboard.table.name', 'Task name')}</th>
+            <th onClick={this.sortData('issuer')} width='300'>{i18n('Dashboard.table.issuer', 'Issuer')}</th>
+            <th onClick={this.sortData('issueDate')} width='200'>{i18n('Dashboard.table.issueDate', 'Issue date')}</th>
             <th onClick={this.sortData('active')} width='40'/>
           </tr>
         </thead>
@@ -108,6 +116,10 @@ class Dashboard extends Component {
       </Table>
     </div>
   }
+}
+
+Dashboard.propTypes = {
+  history: PropTypes.object.isRequired
 }
 
 export default withRouter(Dashboard)

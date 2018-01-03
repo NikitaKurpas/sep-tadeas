@@ -1,7 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Route, Link } from 'react-router-dom'
+import i18n from '../services/i18n'
 
-const Navbar = ({username}) => (
+const Navbar = ({user}) => (
   <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
     <div className='container'>
       {/*<a className='navbar-brand' href='#'>TADEAS</a>*/}
@@ -20,15 +22,19 @@ const Navbar = ({username}) => (
         <Route path='/tasks/:what' render={() => (
           <ul className='navbar-nav mr-auto'>
             <li className='nav-item active'>
-              <Link to='/' className='btn btn-primary'>Task list</Link>
+              <Link to='/' className='btn btn-primary'>{i18n('Navbar.taskList', 'Task list')}</Link>
             </li>
           </ul>
         )}/>
       </div>
-      <span className='my-0 my-md-2 mr-md-2' style={{color: '#fff'}}>{username}</span>
-      <Link to='/logout' className='btn btn-outline-danger my-2 my-sm-0'>Log out</Link>
+      <span className='my-0 my-md-2 mr-md-2' style={{color: '#fff'}}>{user.userName}</span>
+      <Link to='/logout' className='btn btn-outline-danger my-2 my-sm-0'>{i18n('Navbar.logOut', 'Log out')}</Link>
     </div>
   </nav>
 )
+
+Navbar.propTypes = {
+  user: PropTypes.object.isRequired
+}
 
 export default Navbar
