@@ -15,7 +15,13 @@ pipeline {
                 sh 'npm install'
             }
         }
-        stage('Test') { 
+        stage('Test') {
+            agent {
+                docker {
+                    image 'node:6-alpine' 
+                    args '-p 3000:3000' 
+                }
+            } 
             steps {
                 echo 'tady budou testy'
                 sh 'npm test' 
