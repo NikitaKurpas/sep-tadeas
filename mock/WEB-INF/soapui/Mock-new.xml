@@ -1,0 +1,728 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="6822fdff-66b0-4095-a6ad-27feeff7487e" activeEnvironment="Default" name="Project 1" soapui-version="5.4.0-EB" abortOnError="false" runType="SEQUENTIAL" resourceRoot="" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:restMockService id="422a3899-109d-4c9b-93cf-cbc5525069cb" port="8081" path="/" host="Matejs-MacBook-Pro.local" name="REST MockService 1" docroot=""><con:settings/><con:properties/><con:restMockAction name="/user/login" method="GET" resourcePath="/user/login" id="bc0d1cda-6547-45bb-88b9-b144ba9c92bc"><con:settings/><con:defaultResponse>Response Alice</con:defaultResponse><con:dispatchStyle>SCRIPT</con:dispatchStyle><con:dispatchPath><![CDATA[
+// Script dispatcher is used to select a response based on the incoming request.
+// Here are few examples showing how to match based on path, query param, header and body
+
+// Match based on query parameter
+def queryString = mockRequest.getRequest().getQueryString()
+log.info "QueryString: " + queryString
+
+def queryParams = mockRequest.getRequest().getQueryString().split('&')
+def mapParams = queryParams.collectEntries { param -> param.split('=').collect { URLDecoder.decode(it) }}
+def username = mapParams["username"]
+def password = mapParams["password"]
+
+log.info "username: " + username
+log.info "password: " + password
+
+if(username.toLowerCase().contains("alice") && password.equals("12345")){
+    // return the name of the response you want to dispatch
+    return "Response Alice"
+}
+else if(username.toLowerCase().contains("bob") && password.equals("12345")){
+    // return the name of the response you want to dispatch
+    return "Response Bob"
+}
+else if(username.toLowerCase().contains("eve") && password.equals("12345")) {
+    // return the name of the response you want to dispatch
+    return "Response Eve"
+}
+else {
+	return "Response 403"
+}
+]]></con:dispatchPath><con:response name="Response Alice" id="e4705cd3-a02f-4314-aa70-62ed7ca8f4de" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+	"sessionId": "123456",
+	"userName": "alice",
+	"firstName": "Alice",
+	"lastName": "Alicova",
+	"email": "alice@email.com",
+	"UserRole": "student",
+	"groups": ["Alfa"]
+}
+</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response Bob" id="1d5d5645-2324-47e6-8d93-b23008328417" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+	"sessionId": "123456",
+	"userName": "bob",
+	"firstName": "Bob",
+	"lastName": "Bobak",
+	"email": "bob@email.com",
+	"UserRole": "student",
+	"groups": ["Beta", "Gama"]
+}
+</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response Eve" id="e6ab9948-f2df-4e0f-85d4-3f7085ee720c" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+	"sessionId": "123456",
+	"userName": "eve",
+	"firstName": "Eve",
+	"lastName": "Eveova",
+	"email": "eve@email.com",
+	"UserRole": "teacher",
+	"groups": []
+}</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response 403" id="8f9bebaf-0754-4201-84b6-dc4b556ba1bb" httpResponseStatus="403" mediaType="text/xml"><con:settings/><con:responseContent><![CDATA[<!DOCTYPE html>
+<html>
+<head>
+<title>403 ERROR: Access denied</title>
+</head>
+<body>
+<h1>Access Denied (403)</h1>
+<p>We're sorry, but you are not authorized to view this page.</p>
+</body>
+</html>]]></con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response></con:restMockAction><con:restMockAction name="/group" method="GET" resourcePath="/group" id="562a3cd6-925c-48ac-955c-af6979028724"><con:settings/><con:defaultResponse>Response 4</con:defaultResponse><con:dispatchStyle>SCRIPT</con:dispatchStyle><con:dispatchPath>// Script dispatcher is used to select a response based on the incoming request.
+// Here are few examples showing how to match based on path, query param, header and body
+def sessId = mockRequest.getRequestHeaders().get("Session-Id")
+log.info "Session Id: " + sessId
+
+if (sessId != "54321") {
+	return "Response 403"
+}
+
+def requestPath = mockRequest.getPath().split("/");
+if (requestPath.length == 1) {
+	return "Response List";
+}
+try {
+	def id = Integer.parseInt(requestPath[requestPath.length - 1]);
+	
+	if (id == 1) {
+		return "Response Alfa";
+	}
+	if (id == 2) {
+		return "Response Beta";
+	}
+	if (id == 3) {
+		return "Response Gama";
+	}
+	else {
+		return "Response Not Found";
+	}
+}
+catch (NumberFormatException e) {
+	log.info "NumberFormatException";
+	return "Response Not Found";
+}
+</con:dispatchPath><con:response name="Response Alfa" id="5555ec87-9ba9-4229-8174-6e8a2696d209" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+	"name" : "Alfa"
+}
+</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response Beta" id="452f5ec9-b357-4471-8c26-63ae211d500b" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+	"name" : "Beta"
+}
+</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response Gama" id="bf5a1b86-0a09-49b8-ac8e-a57ce8bb6471" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+	"name" : "Gama"
+}
+</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response Not Found" id="776b5ff6-0997-4b77-8527-57067d88332f" httpResponseStatus="200" mediaType="text/xml"><con:settings/><con:responseContent><![CDATA[<!DOCTYPE html>
+<html>
+    <head>
+        <title>Item not found</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <h2>Item was not found</h2>
+    </body>
+</html>
+]]></con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response List" id="d2b52dde-8bf4-4036-ab56-5883709ff283" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+[
+	{
+		"id":1
+		"name":"Alfa"
+	},
+	{
+		"id":2
+		"name":"Beta"
+	},
+	{
+		"id":3
+		"name":"Gama"
+	}
+]
+}
+</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response 403" id="d9ce5cd8-aed6-4fb3-b3a4-70d20697b03d" httpResponseStatus="403" mediaType="text/xml"><con:settings/><con:responseContent><![CDATA[<!DOCTYPE html>
+<html>
+<head>
+<title>403 ERROR: Access denied</title>
+</head>
+<body>
+<h1>Access Denied (403)</h1>
+<p>We're sorry, but you are not authorized to view this page.</p>
+</body>
+</html>]]></con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response></con:restMockAction><con:restMockAction name="/role" method="GET" resourcePath="/role" id="f6da5908-a608-427b-bda6-ea74056d19e7"><con:settings/><con:defaultResponse>Response Admin</con:defaultResponse><con:dispatchStyle>SCRIPT</con:dispatchStyle><con:dispatchPath>// Script dispatcher is used to select a response based on the incoming request.
+// Here are few examples showing how to match based on path, query param, header and body
+def sessId = mockRequest.getRequestHeaders().get("Session-Id")
+log.info "Session Id: " + sessId
+
+if (sessId != "54321") {
+	return "Response 403"
+}
+
+def requestPath = mockRequest.getPath().split("/");
+if (requestPath.length == 1) {
+	return "Response List";
+}
+try {
+	def id = Integer.parseInt(requestPath[requestPath.length - 1]);
+	
+	if (id == 1) {
+		return "Response Admin";
+	}
+	if (id == 2) {
+		return "Response Teacher";
+	}
+	if (id == 3) {
+		return "Response Student";
+	}
+	else {
+		return "Response Not Found";
+	}
+}
+catch (NumberFormatException e) {
+	log.info "NumberFormatException";
+	return "Response Not Found";
+}
+</con:dispatchPath><con:response name="Response Admin" id="f3aeb000-70e0-415e-8a52-81cbdd9d56d7" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+	"name" : "admin"
+}
+</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response Teacher" id="976bbce9-a445-4902-8f70-26de60b94264" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+	"name" : "student"
+}
+</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response Student" id="5ec01ae0-b54f-46ba-b607-d773adcc25c0" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+	"name" : "teacher"
+}
+</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response Not Found" id="7da3b3a0-b06e-4571-a8c9-894f0978b2ce" httpResponseStatus="200" mediaType="text/xml"><con:settings/><con:responseContent><![CDATA[<!DOCTYPE html>
+<html>
+    <head>
+        <title>Item not found</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <h2>Item was not found</h2>
+    </body>
+</html>
+]]></con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response List" id="850f76e9-f677-4c9c-9d96-ca47c0bb4c06" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+[
+	{
+		"id":1
+		"name":"admin"
+	},
+	{
+		"id":2
+		"name":"student"
+	},
+	{
+		"id":3
+		"name":"teacher"
+	}
+]
+}</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response 403" id="b5d23638-ce4f-4366-be39-73859a871deb" httpResponseStatus="403" mediaType="text/xml"><con:settings/><con:responseContent><![CDATA[<!DOCTYPE html>
+<html>
+<head>
+<title>403 ERROR: Access denied</title>
+</head>
+<body>
+<h1>Access Denied (403)</h1>
+<p>We're sorry, but you are not authorized to view this page.</p>
+</body>
+</html>]]></con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response></con:restMockAction><con:restMockAction name="/task" method="GET" resourcePath="/task" id="50570230-2b77-4666-b50f-be47df3dd550"><con:settings/><con:defaultResponse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/><con:dispatchStyle>SCRIPT</con:dispatchStyle><con:dispatchPath>// Script dispatcher is used to select a response based on the incoming request.
+// Here are few examples showing how to match based on path, query param, header and body
+def sessId = mockRequest.getRequestHeaders().get("Session-Id")
+log.info "Session Id: " + sessId
+
+//if (sessId != "null") {
+//	return "Response 403"
+//}
+
+def requestPath = mockRequest.getPath().split("/");
+log.info(Arrays.toString(requestPath))
+if (requestPath.length == 2) {
+	return "Response List";
+}
+try {
+	def id = Integer.parseInt(requestPath[requestPath.length - 1]);
+	
+	if (id == 1) {
+		return "Response 1";
+	}
+	if (id == 2) {
+		return "Response 2";
+	}
+	if (id == 3) {
+		return "Response 3";
+	}
+	else {
+		return "Response Not Found";
+	}
+}
+catch (NumberFormatException e) {
+	log.info "NumberFormatException";
+	return "Response Not Found";
+}
+</con:dispatchPath><con:response name="Response 1" id="93fd5677-8fa6-45f7-8ba7-9569104dd597" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+	"id":1,
+	"name":"TADEAS 1",
+	"issuer":1,
+	"issueDate":"2017-11-01",
+	"active":true,
+	"definition":"Task TADEAS 1"
+}</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response 2" id="d4882b06-90e9-469d-87fb-f473296abfb6" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+	"id":2,
+	"name":"TADEAS 2",
+	"issuer":1,
+	"issueDate":"2017-11-02",
+	"active":true,
+	"definition":"Task TADEAS 2"
+}</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response 3" id="d1e14f39-4fdc-4c7b-bc51-3e4e9a118390" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+	"id":3,
+	"name":"TADEAS 3",
+	"issuer":1,
+	"issueDate":"2017-12-03",
+	"active":false,
+	"definition":"Task TADEAS 3"
+}</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response Not Found" id="80b7e37a-a2d4-4fd1-93cd-3e64f93f4c8e" httpResponseStatus="200" mediaType="text/xml"><con:settings/><con:responseContent><![CDATA[<!DOCTYPE html>
+<html>
+    <head>
+        <title>Item not found</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <h2>Item was not found</h2>
+    </body>
+</html>
+]]></con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response List" id="052f26af-7a8e-40c3-906f-bfdbd5562070" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>[
+	{
+		"id":1,
+		"name":"TADEAS 1",
+		"issuer":1,
+		"issueDate":"2017-11-01",
+		"active":true,
+		"definition":"Task TADEAS 1"
+	},
+	{
+		"id":2,
+		"name":"TADEAS 2",
+		"issuer":1,
+		"issueDate":"2017-11-02",
+		"active":true,
+		"definition":"Task TADEAS 2"
+	},
+	{
+		"id":3,
+		"name":"TADEAS 3",
+		"issuer":1,
+		"issueDate":"2017-12-03",
+		"active":false,
+		"definition":"Task TADEAS 3"
+	}
+]</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response 403" id="edb273ee-ca2a-498c-a18f-f52246329e31" httpResponseStatus="403" mediaType="text/xml"><con:settings/><con:responseContent><![CDATA[<!DOCTYPE html>
+<html>
+<head>
+<title>403 ERROR: Access denied</title>
+</head>
+<body>
+<h1>Access Denied (403)</h1>
+<p>We're sorry, but you are not authorized to view this page.</p>
+</body>
+</html>]]></con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response></con:restMockAction><con:restMockAction name="/window" method="GET" resourcePath="/window" id="e7ac9274-3e14-464f-ac6b-c4fe5570f53f"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SCRIPT</con:dispatchStyle><con:dispatchPath>// Script dispatcher is used to select a response based on the incoming request.
+// Here are few examples showing how to match based on path, query param, header and body
+def sessId = mockRequest.getRequestHeaders().get("Session-Id")
+log.info "Session Id: " + sessId
+
+if (sessId != "54321") {
+	return "Response 403"
+}
+
+def requestPath = mockRequest.getPath().split("/");
+if (requestPath.length == 1) {
+	return "Response List";
+}
+try {
+	def id = Integer.parseInt(requestPath[requestPath.length - 1]);
+	
+	if (id == 1) {
+		return "Response 1";
+	}
+	if (id == 2) {
+		return "Response 2";
+	}
+	if (id == 3) {
+		return "Response 3";
+	}
+	else {
+		return "Response Not Found";
+	}
+}
+catch (NumberFormatException e) {
+	log.info "NumberFormatException";
+	return "Response Not Found";
+}
+</con:dispatchPath><con:response name="Response 1" id="d8e7f562-4f9a-4922-adf2-795e15d4fea7" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+		"id":1
+		"task":1
+		"issuer":1
+		"solver" : 1
+		"issueDate" : "2017-11-01"
+		"startDate" "2017-11-01" 
+		"deadlineDate" : "2018-01-01"
+		"active" : true
+		"name" : "TADEAS 1"
+		"definition":"Task TADEAS 1"
+	}</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response 2" id="be7b28fa-d482-490c-a0b2-8a0ef8a6783a" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+		"id":2
+		"task":2
+		"issuer":1
+		"solver" : 2
+		"issueDate" : "2017-11-02"
+		"startDate" "2017-11-05"
+		"deadlineDate" : "2018-01-01"
+		"active" : true
+		"name" : "TADEAS 2"
+		"definition":"Task TADEAS 2"
+}</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response 3" id="e4d34863-8e26-4f89-bc13-8e528d440ff8" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+		"id":3
+		"task":3
+		"issuer":3
+		"solver" : 3
+		"issueDate" : "2017-12-03"
+		"startDate" "2017-12-03"
+		"deadlineDate" : "2017-12-05"
+		"active" : false
+		"name" : "TADEAS 3"
+		"definition":"Task TADEAS 3"
+}</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response Not Found" id="4534f50f-ab2a-41db-833a-1901a21d22a9" httpResponseStatus="200" mediaType="text/xml"><con:settings/><con:responseContent><![CDATA[<!DOCTYPE html>
+<html>
+    <head>
+        <title>Item not found</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <h2>Item was not found</h2>
+    </body>
+</html>
+]]></con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response List" id="206071ec-686b-42db-afbb-fdf1143fd734" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+[
+	{
+		"id":1
+		"task":1
+		"issuer":1
+		"solver" : 1
+		"issueDate" : "2017-11-01"
+		"startDate" "2017-11-01" 
+		"deadlineDate" : "2018-01-01"
+		"active" : true
+		"name" : "TADEAS 1"
+		"definition":"Task TADEAS 1"
+	},
+	{
+		"id":2
+		"task":2
+		"issuer":1
+		"solver" : 2
+		"issueDate" : "2017-11-02"
+		"startDate" "2017-11-05"
+		"deadlineDate" : "2018-01-01"
+		"active" : true
+		"name" : "TADEAS 2"
+		"definition":"Task TADEAS 2"
+	},
+	{
+		"id":3
+		"task":3
+		"issuer":3
+		"solver" : 3
+		"issueDate" : "2017-12-03"
+		"startDate" "2017-12-03"
+		"deadlineDate" : "2017-12-05"
+		"active" : false
+		"name" : "TADEAS 3"
+		"definition":"Task TADEAS 3"
+	}
+]
+}</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response 403" id="cac5bc38-42f8-4856-a01d-19f03d25376d" httpResponseStatus="403"><con:settings/><con:responseContent><![CDATA[<!DOCTYPE html>
+<html>
+<head>
+<title>403 ERROR: Access denied</title>
+</head>
+<body>
+<h1>Access Denied (403)</h1>
+<p>We're sorry, but you are not authorized to view this page.</p>
+</body>
+</html>]]></con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response></con:restMockAction><con:restMockAction name="/delivery" method="GET" resourcePath="/delivery" id="5abd914c-ce91-4bb9-953a-49d491213ed9"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SCRIPT</con:dispatchStyle><con:dispatchPath>// Script dispatcher is used to select a response based on the incoming request.
+// Here are few examples showing how to match based on path, query param, header and body
+def sessId = mockRequest.getRequestHeaders().get("Session-Id")
+log.info "Session Id: " + sessId
+
+//if (sessId != "123456") {
+//	return "Response 403"
+//}
+
+def requestPath = mockRequest.getPath().split("/");
+if (requestPath.length == 2) {
+	return "Response List";
+}
+try {
+	def id = Integer.parseInt(requestPath[requestPath.length - 1]);
+	
+	if (id == 1) {
+		return "Response 1";
+	}
+	if (id == 2) {
+		return "Response 2";
+	}
+	if (id == 3) {
+		return "Response 3";
+	}
+	else {
+		return "Response Not Found";
+	}
+}
+catch (NumberFormatException e) {
+	log.info "NumberFormatException";
+	return "Response Not Found";
+}
+</con:dispatchPath><con:response name="Response 1" id="b5194e29-7be4-4b21-9e51-3619e5d5cf38" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+		"id" : 1,
+		"taskDeliveryWindow" : 1,
+		"solution" : "\x16\x00\x00\x00\x02hello\x00\x06\x00\x00\x00world\x00\x00",
+		"deliveryDate" : "2017-12-01",
+		"deliveryUser" : 1,
+		"valid" : true
+}</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response 2" id="9cf7fd88-ed84-499d-888c-f23e0b29080e" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+		"id" : 2,
+		"taskDeliveryWindow" : 1,
+		"solution" : "\x16\x00\x00\x00\x02hello\x00\x06\x00\x00\x00world\x00\x00",
+		"deliveryDate" : "2017-12-02",
+		"deliveryUser" : 1,
+		"valid" : true
+}</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response 3" id="0cc59fa0-8dc8-44ea-b8d4-b124a3bbfb1e" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+		"id" : 3,
+		"taskDeliveryWindow" : 2,
+		"solution" : "\x16\x00\x00\x00\x02hello\x00\x06\x00\x00\x00world\x00\x00",
+		"deliveryDate" : "2017-12-03",
+		"deliveryUser" : 1,
+		"valid" : false
+}</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response Not Found" id="ddd3272a-6bf6-4d06-a8f4-e6978e7f5d55" httpResponseStatus="200" mediaType="text/xml"><con:settings/><con:responseContent><![CDATA[<!DOCTYPE html>
+<html>
+    <head>
+        <title>Item not found</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <h2>Item was not found</h2>
+    </body>
+</html>
+]]></con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response List" id="aeeecb6a-7244-4368-8a87-6d6a2c6e743f" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>[
+	{
+		"id" : 1,
+		"taskDeliveryWindow" : 1,
+		"solution" : "",
+		"deliveryDate" : "2017-12-01",
+		"deliveryUser" : 1,
+		"valid" : true
+	},
+	{
+		"id" : 2,
+		"taskDeliveryWindow" : 1,
+		"solution" : "",
+		"deliveryDate" : "2017-12-02",
+		"deliveryUser" : 1,
+		"valid" : true
+	},
+	{
+		"id" : 3,
+		"taskDeliveryWindow" : 2,
+		"solution" : "",
+		"deliveryDate" : "2017-12-03",
+		"deliveryUser" : 1,
+		"valid" : false
+	}
+]</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response 403" id="78ff4390-90c0-465b-baea-4f26cfe81d67" httpResponseStatus="403" mediaType="text/xml"><con:settings/><con:responseContent><![CDATA[<!DOCTYPE html>
+<html>
+<head>
+<title>403 ERROR: Access denied</title>
+</head>
+<body>
+<h1>Access Denied (403)</h1>
+<p>We're sorry, but you are not authorized to view this page.</p>
+</body>
+</html>]]></con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response></con:restMockAction><con:restMockAction name="/delivery" method="POST" resourcePath="/delivery" id="70eff062-bae8-4bb4-b720-2101d8529e50"><con:settings/><con:defaultResponse xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:dispatchPath>/*
+// Script dispatcher is used to select a response based on the incoming request.
+// Here are few examples showing how to match based on path, query param, header and body
+
+// Match based on path
+def requestPath = mockRequest.getPath()
+log.info "Path: "+ requestPath
+
+if( requestPath.contains("json") )
+{
+    // return the name of the response you want to dispatch
+    return "JSON Response"
+}
+
+
+// Match based on query parameter
+def queryString = mockRequest.getRequest().getQueryString()
+log.info "QueryString: " + queryString
+
+if( queryString.contains("stockholm") )
+{
+    // return the name of the response you want to dispatch
+    return "Response Stockholm"
+}
+else if( queryString.contains("london") )
+{
+    // return the name of the response you want to dispatch
+    return "Response London"
+}
+
+
+// Match based on header
+def acceptEncodingHeaderList = mockRequest.getRequestHeaders().get("Accept-Encoding")
+log.info "AcceptEncoding Header List: " + acceptEncodingHeaderList
+
+if( acceptEncodingHeaderList.contains("gzip,deflate") )
+{
+    // return the name of the response you want to dispatch
+    return "GZiped Response"
+}
+
+
+// Match based on body
+def requestBody = mockRequest.getRequestContent()
+log.info "Request body: " + requestBody
+
+if( requestBody.contains("some data") )
+{
+    // return the name of the response you want to dispatch
+    return "Response N"
+}
+*/
+</con:dispatchPath><con:response name="Response 1" id="524ae6f4-4887-4b0c-9c15-b1903eb45915" httpResponseStatus="200"><con:settings/><con:responseContent/></con:response></con:restMockAction><con:restMockAction name="/delivery" method="PUT" resourcePath="/delivery" id="0079b50a-e5a5-4db5-a401-c5168055f785"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:dispatchPath>/*
+// Script dispatcher is used to select a response based on the incoming request.
+// Here are few examples showing how to match based on path, query param, header and body
+
+// Match based on path
+def requestPath = mockRequest.getPath()
+log.info "Path: "+ requestPath
+
+if( requestPath.contains("json") )
+{
+    // return the name of the response you want to dispatch
+    return "JSON Response"
+}
+
+
+// Match based on query parameter
+def queryString = mockRequest.getRequest().getQueryString()
+log.info "QueryString: " + queryString
+
+if( queryString.contains("stockholm") )
+{
+    // return the name of the response you want to dispatch
+    return "Response Stockholm"
+}
+else if( queryString.contains("london") )
+{
+    // return the name of the response you want to dispatch
+    return "Response London"
+}
+
+
+// Match based on header
+def acceptEncodingHeaderList = mockRequest.getRequestHeaders().get("Accept-Encoding")
+log.info "AcceptEncoding Header List: " + acceptEncodingHeaderList
+
+if( acceptEncodingHeaderList.contains("gzip,deflate") )
+{
+    // return the name of the response you want to dispatch
+    return "GZiped Response"
+}
+
+
+// Match based on body
+def requestBody = mockRequest.getRequestContent()
+log.info "Request body: " + requestBody
+
+if( requestBody.contains("some data") )
+{
+    // return the name of the response you want to dispatch
+    return "Response N"
+}
+*/
+</con:dispatchPath><con:response name="Response 1" id="adc4b275-e805-4172-98a6-26576526fe8c" httpResponseStatus="200"><con:settings/><con:responseContent/></con:response></con:restMockAction><con:restMockAction name="/user" method="GET" resourcePath="/user" id="b45cc47e-d385-452a-811e-f5dfd259fe6f"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SCRIPT</con:dispatchStyle><con:dispatchPath>
+// Script dispatcher is used to select a response based on the incoming request.
+// Here are few examples showing how to match based on path, query param, header and body
+
+// Match based on query parameter
+def sessId
+try {
+	sessId = mockRequest.getRequestHeaders().get("Session-Id")
+	log.info "Session Id: " + sessId	
+	if (sessId != "54321") {
+		return "Response 403"
+	}
+}
+catch (Exception e) {
+	log.info "return 403"
+	return "Response 403"
+}
+
+def requestPath = mockRequest.getPath().split("/");
+if (requestPath.length == 1) {
+	return "Response Not Found";
+}
+try {
+	def id = Integer.parseInt(requestPath[requestPath.length - 1]);
+	
+	if (id == 1) {
+		return "Response Alice";
+	}
+	if (id == 2) {
+		return "Response Bob";
+	}
+	if (id == 3) {
+		return "Response Eve";
+	}
+	else {
+		return "Response Not Found";
+	}
+}
+catch (NumberFormatException e) {
+	log.info "NumberFormatException";
+	return "Response Not Found";
+}
+</con:dispatchPath><con:response name="Response Alice" id="7dd0b47f-796e-4825-bd06-0c1be34788dd" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+	sessionKey:"54321",
+	id:1,
+	firstName: "Alice",
+	lastName: "Alicova",
+	email: "alice@email.com",
+	UserRole: "student",
+	groups: ["Alfa"]
+}
+</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response Bob" id="c837f685-b5e5-4066-a292-2d74e23cfefd" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+	sessionKey:"54321",
+	id:2,
+	firstName: "Bob",
+	lastName: "Bobak",
+	email: "bob@email.com,
+	UserRole: "student",
+	groups: ["Beta", "Gama"]
+}
+</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response Eve" id="ba8732ef-cac0-4fea-aa24-2cee03fb9dee" httpResponseStatus="200" mediaType="application/json"><con:settings/><con:responseContent>{
+	sessionKey:"54321",
+	id:3,
+	firstName: "Eve",
+	lastName: "Eveova",
+	email: "eve@email.com,
+	UserRole: "teacher",
+	groups: []
+}</con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response Not Found" id="0c82b91a-cead-4404-a75c-5a47c72a0a57" httpResponseStatus="200"><con:settings/><con:responseContent/><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response><con:response name="Response 403" id="bbf9a1d4-b43c-49df-b607-cf5566a62294" httpResponseStatus="403" mediaType="text/xml"><con:settings/><con:responseContent><![CDATA[<!DOCTYPE html>
+<html>
+<head>
+<title>403 ERROR: Access denied</title>
+</head>
+<body>
+<h1>Access Denied (403)</h1>
+<p>We're sorry, but you are not authorized to view this page.</p>
+</body>
+</html>]]></con:responseContent><con:header><con:name>Access-Control-Allow-Origin</con:name><con:value>*</con:value></con:header></con:response></con:restMockAction></con:restMockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
