@@ -1,6 +1,7 @@
-package po;
+package selenium_tests.src.po;
 
-import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -8,14 +9,12 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.List;
-
 public class LoginPage {
   private final WebDriver driver;
   private final WebDriverWait wait;
 
-  @FindBy(id = "email")
-  private WebElement emailInput;
+  @FindBy(id = "username")
+  private WebElement usernameInput;
 
   @FindBy(id = "password")
   private WebElement passwordInput;
@@ -26,7 +25,7 @@ public class LoginPage {
   @FindBy(xpath = "//*[@id=\"root\"]/div/div/div/form/button[2]")
   private WebElement resetButton;
 
-  @FindBy(className = "table")
+  @FindBy(xpath = "table")
   private WebElement tasksTable;
 
   public LoginPage(final WebDriver driver) {
@@ -39,15 +38,35 @@ public class LoginPage {
     this.driver.get("http://localhost:3000/login");
   }
 
-  public void login(String email, String password) throws InterruptedException {
-    this.emailInput.sendKeys(email);
+  public void login(String username, String password) throws InterruptedException {
+    this.usernameInput.clear();
+    this.passwordInput.clear();
+
+    this.usernameInput.sendKeys(username);
     this.passwordInput.sendKeys(password);
+    System.out.println("Sent username: " + username);
+    System.out.println("Sent password: " + password);
     wait.until(ExpectedConditions.elementToBeClickable(this.signInButton));
     this.signInButton.click();
   }
 
   public WebElement getTable() {
     return this.tasksTable;
+  }
+
+  public boolean isAlertPresent() {
+    try {
+      wait.until(ExpectedConditions.alertIsPresent());
+      driver.switchTo().alert();
+      return true;
+    }   // try
+    catch (NoAlertPresentException Ex) {
+      return false;
+    }   // catch
+  }   // isAlertPresent()
+
+  public void confirmAlert() {
+    driver.switchTo().alert().accept();
   }
 
 }
