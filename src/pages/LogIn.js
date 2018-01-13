@@ -2,6 +2,7 @@ import React from 'react'
 import { Redirect } from 'react-router-dom'
 import { logIn } from '../services/authService'
 import './LogIn.css'
+import { Button } from 'react-bootstrap';
 
 class LogIn extends React.Component {
   state = {
@@ -20,20 +21,23 @@ class LogIn extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault()
-    logIn({email: this.state.email, password: this.state.password}, () => {
-      this.setState({redirectToReferrer: true})
+    logIn({ email: this.state.email, password: this.state.password }, () => {
+      this.setState({ redirectToReferrer: true })
     })
   }
 
-  render () {
-    const {from} = this.props.location.state || {from: {pathname: '/'}}
-    const {redirectToReferrer} = this.state
+  render() {
+    const { from } = this.props.location.state || { from: { pathname: '/' } }
+    const { redirectToReferrer } = this.state
 
     if (redirectToReferrer) {
       return (
-        <Redirect to={from}/>
+        <Redirect to={from} />
       )
     }
+    
+    //potreba nastavit po prvnim neuspesnem prihlaseni
+    var loginFail = false;
 
     return (
       <div className='LogIn'>
@@ -43,30 +47,35 @@ class LogIn extends React.Component {
             {/* Email */}
             <label htmlFor='email' className='sr-only'>Email address</label>
             <input type='email'
-                   id='email'
-                   name='email'
-                   className='form-control'
-                   placeholder='Email address'
-                   required
-                   autoFocus
-                   value={this.state.email}
-                   onChange={this.handleInputChange}/>
+              id='email'
+              name='email'
+              className='form-control'
+              placeholder='Email address'
+              required
+              autoFocus
+              value={this.state.email}
+              onChange={this.handleInputChange} />
             {/* Password */}
             <label htmlFor='password' className='sr-only'>Password</label>
             <input type='password'
-                   id='password'
-                   className='form-control'
-                   placeholder='Password'
-                   required
-                   value={this.state.password}
-                   onChange={this.handleInputChange}/>
+              id='password'
+              className='form-control'
+              placeholder='Password'
+              required
+              value={this.state.password}
+              onChange={this.handleInputChange} />
 
             {/*<div className='checkbox'>*/}
-              {/*<label>*/}
-                {/*<input type='checkbox' value='remember-me'> Remember me </input>*/}
-              {/*</label>*/}
+            {/*<label>*/}
+            {/*<input type='checkbox' value='remember-me'> Remember me </input>*/}
+            {/*</label>*/}
             {/*</div>*/}
             <button className='btn btn-lg btn-primary btn-block' type='submit'>Sign in</button>
+            {
+              loginFail ?
+                <Button className='btn btn-lg btn-primary btn-block'>Resetovat heslo</Button>
+                : <Button className='btn btn-lg btn-primary btn-block' disabled>Resetovat heslo</Button>
+            }
           </form>
         </div>
       </div>
