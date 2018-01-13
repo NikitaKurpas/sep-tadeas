@@ -1,52 +1,60 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import './TaskDetail.css'
-import TaskHistory from '../components/TaskHistory';
-import { Button, Row, Col } from 'react-bootstrap';
+import TaskHistory from '../components/TaskHistory'
+import { Button, Row, Col } from 'react-bootstrap'
+import api from '../services/api'
+import i18n from '../services/i18n'
 
 class TaskDetail extends Component {
-  state = {
-    task: {
-      id: 1,
-      name: 'Task #1',
-      issuer: 'Issuer A',
-      issueDate: '1st January 2018',
-      active: true,
-      definition: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin mi justo, ultricies ac porttitor ut, porttitor pharetra velit. Curabitur lacinia nulla eu risus tincidunt porta. Nam id turpis purus. Phasellus id eros nec risus placerat viverra et vel augue. Sed porttitor libero sapien, nec convallis diam consectetur in. Praesent iaculis ante eget odio consequat egestas. Etiam mattis gravida eros. Pellentesque id condimentum quam. Nullam scelerisque diam nec neque cursus ornare.\n' +
-        '\n' +
-        'Nulla sit amet tellus ut odio efficitur tristique ac a purus. Nullam quis dictum lorem, ac aliquet mi. Phasellus laoreet rhoncus augue eget posuere. Quisque mauris lorem, bibendum quis magna vitae, iaculis bibendum mi. Sed mattis eu eros ac luctus. Mauris vel commodo turpis. Maecenas luctus sem dolor, ac facilisis mi tincidunt ut.'
-    }
-  }
-  render() {
-    const { task } = this.state
+  state = {}
 
-    var isTeacher = true; //TODO: dostat jako props na zaklade role, ovlinuje vykresleni
+  componentDidMount () {
+    api(`/task/${this.props.match.params.id}`)
+      .then(body => Promise.all([body, api(`/delivery`)]))
+      .then(([task, delivery]) => {
+        // TODO: idk how to get deliveries for the task...
+      })
+  }
+
+  render () {
+    const {task} = this.state
+    const {user} = this.props
+
+    const isTeacher = user.role === 'teacher'
+
+    if (!task) {
+      return <div className="container">Loading...</div>
+    }
 
     return <div className='TaskDetail container'>
       <Row>
         <Col xs={12} md={6} sm={12}>
           <h2>{task.name}</h2>
-          <h4>By {task.issuer}</h4>
-          <h6>Issue Date: {task.issueDate}</h6>
+          <h4>{i18n('TaskDetail.by', "By")} {task.issuer}</h4>
+          <h6>{i18n('TaskDetail.issueDate', 'Issue Date')}: {task.issueDate}</h6>
           {
-            isTeacher ? <div className="acceptTask">
-              <h4>Splněno zadání</h4>
-              <Button>Ano</Button>
-              <Button>Ne</Button>
-            </div> :
+            isTeacher ? (
+              <div className="acceptTask">
+                <h4>{i18n('TaskDetail.teacher.isTaskCompleted', 'Is task completed?')}</h4>
+                <Button>{i18n('TaskDetail.teacher.yes', 'Yes')}</Button>
+                <Button>{i18n('TaskDetail.teacher.no', 'No')}</Button>
+              </div>
+            ) : (
               <form className='upload-form'>
                 <div className="form-group">
-                  <label htmlFor="file">Upload file(s)</label>
-                  <input id="file" name="file" type="file" className="form-control-file" multiple />
+                  <label htmlFor="file">{i18n('TaskDetail.uploadButton', 'Upload file')}</label>
+                  <input id="file" name="file" type="file" className="form-control-file"/>
                 </div>
               </form>
+            )
           }
-          {/* <div className="file-list"> */}
           <div>
-            <TaskHistory />
+            <TaskHistory/>
             {
-              isTeacher ?
-                <Button style={{ marginTop: '5px', marginBottom: '5px' }}>Vyhodnotit</Button> :
-                <Button style={{ marginTop: '5px', marginBottom: '5px' }}>Potvrdit odevzdani</Button>
+              isTeacher
+                ? <Button style={{marginTop: '5px', marginBottom: '5px'}}>{i18n('TaskDetail.teacher.evaluate', 'Evaluate')}</Button>
+                : <Button style={{marginTop: '5px', marginBottom: '5px'}}>{i18n('TaskDetail.confirmSubmission', 'Confirm submission')}</Button>
             }
           </div>
         </Col>
@@ -55,6 +63,11 @@ class TaskDetail extends Component {
 
     </div>
   }
+}
+
+TaskDetail.propTypes = {
+  match: PropTypes.object.isRequired,
+  isTeacher: PropTypes.bool
 }
 
 export default TaskDetail

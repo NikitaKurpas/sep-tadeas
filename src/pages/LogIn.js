@@ -1,18 +1,22 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
 import { logIn } from '../services/authService'
 import './LogIn.css'
-import { Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap'
+import i18n from '../services/i18n'
 
 class LogIn extends React.Component {
   state = {
-    redirectToReferrer: false
+    redirectToReferrer: false,
+    username: '',
+    password: ''
   }
 
   handleInputChange = event => {
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
+    const target = event.target
+    const value = target.type === 'checkbox' ? target.checked : target.value
+    const name = target.name
 
     this.setState(Object.assign({}, this.state, {
       [name]: value
@@ -21,61 +25,55 @@ class LogIn extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault()
-    logIn({ email: this.state.email, password: this.state.password }, () => {
-      this.setState({ redirectToReferrer: true })
+    logIn({username: this.state.username, password: this.state.password}, () => {
+      this.setState({redirectToReferrer: true})
     })
   }
 
-  render() {
-    const { from } = this.props.location.state || { from: { pathname: '/' } }
-    const { redirectToReferrer } = this.state
+  render () {
+    const {from} = this.props.location.state || {from: {pathname: '/'}}
+    const {redirectToReferrer} = this.state
 
     if (redirectToReferrer) {
       return (
-        <Redirect to={from} />
+        <Redirect to={from}/>
       )
     }
-    
+
     //potreba nastavit po prvnim neuspesnem prihlaseni
-    var loginFail = false;
+    var loginFail = false
 
     return (
       <div className='LogIn'>
         <div className='container'>
           <form className='LogIn-form' onSubmit={this.handleSubmit}>
-            <h2 className='LogIn-form-heading'>Please sign in</h2>
+            <h2 className='LogIn-form-heading'>{i18n('LogIn.heading', 'Please sign in')}</h2>
             {/* Email */}
-            <label htmlFor='email' className='sr-only'>Email address</label>
-            <input type='email'
-              id='email'
-              name='email'
-              className='form-control'
-              placeholder='Email address'
-              required
-              autoFocus
-              value={this.state.email}
-              onChange={this.handleInputChange} />
+            <label htmlFor='username' className='sr-only'>{i18n('LogIn.username', 'Username')}</label>
+            <input type='username'
+                   id='username'
+                   name='username'
+                   className='form-control'
+                   placeholder={i18n('LogIn.username', 'Username')}
+                   required
+                   autoFocus
+                   value={this.state.username}
+                   onChange={this.handleInputChange}/>
             {/* Password */}
-            <label htmlFor='password' className='sr-only'>Password</label>
+            <label htmlFor='password' className='sr-only'>{i18n('LogIn.password', 'Password')}</label>
             <input type='password'
-              id='password'
-              className='form-control'
-              placeholder='Password'
-              required
-              value={this.state.password}
-              onChange={this.handleInputChange} />
+                   id='password'
+                   name='password'
+                   className='form-control'
+                   placeholder={i18n('LogIn.password', 'Password')}
+                   required
+                   value={this.state.password}
+                   onChange={this.handleInputChange}/>
 
-            {/*<div className='checkbox'>*/}
-            {/*<label>*/}
-            {/*<input type='checkbox' value='remember-me'> Remember me </input>*/}
-            {/*</label>*/}
-            {/*</div>*/}
-            <button className='btn btn-lg btn-primary btn-block' type='submit'>Sign in</button>
-            {
-              loginFail ?
-                <Button className='btn btn-lg btn-primary btn-block'>Resetovat heslo</Button>
-                : <Button className='btn btn-lg btn-primary btn-block' disabled>Resetovat heslo</Button>
-            }
+            <button className='btn btn-lg btn-primary btn-block'
+                    type='submit'>{i18n('LogIn.signIn', 'Sign in')}</button>
+            <Button className='btn btn-lg btn-primary btn-block'
+                    disabled={!loginFail}>{i18n('LogIn.resetPassword', 'Reset password')}</Button>
           </form>
         </div>
       </div>
@@ -83,4 +81,8 @@ class LogIn extends React.Component {
   }
 }
 
-export default LogIn;
+LogIn.propTypes = {
+  location: PropTypes.object.isRequired
+}
+
+export default LogIn

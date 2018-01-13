@@ -1,16 +1,20 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom'
-import { isLoggedIn, logOut, getUsername } from './services/authService'
+import { isLoggedIn, logOut, getUser } from './services/authService'
 import PrivateRoute from './components/PrivateRoute'
 import Navbar from './components/Navbar'
 import LogIn from './pages/LogIn'
 import Dashboard from './pages/Dashboard'
 import TaskDetail from './pages/TaskDetail'
 import './App.css'
-import logo from './logo.svg'
+// import logo from './logo.svg'
 
 class App extends Component {
   render () {
+    let user = void 0;
+    if (isLoggedIn()) {
+      user = getUser()
+    }
     return (
       <Router>
         <div>
@@ -21,10 +25,14 @@ class App extends Component {
             return <Redirect to='/login'/>
           }}/>
           <PrivateRoute path='/tasks' render={props => (
-            <Navbar username={getUsername()} {...props}/>
+            <Navbar user={user} {...props}/>
           )}/>
-          <PrivateRoute path='/tasks' exact component={Dashboard}/>
-          <PrivateRoute path='/tasks/:id' exact component={TaskDetail}/>
+          <PrivateRoute path='/tasks' exact render={props => (
+            <Dashboard user={user} {...props}/>
+          )}/>
+          <PrivateRoute path='/tasks/:id' exact render={props => (
+            <TaskDetail user={user} {...props}/>
+          )}/>
         </div>
         {/* <div className='App'> */}
         {/* <header className='App-header'> */}

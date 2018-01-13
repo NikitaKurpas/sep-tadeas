@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Table } from 'react-bootstrap'
-
+import i18n from '../services/i18n'
 
 const styles = {
     table: {
@@ -9,7 +9,7 @@ const styles = {
         height: '300px',
         maxWidth: '400px',
         background: '#ffffff',
-        overflowX: 'hidden',
+        overflowX: 'hidden'
     }
 }
 
@@ -88,15 +88,15 @@ class TaskHistory extends Component {
                 <Table >
                     <thead>
                         <tr>
-                            <th>Název</th>
-                            <th>Datum</th>
-                            <th>Stáhnout</th>
+                            <th>{i18n('TaskDetail.TaskHistory.name', 'Name')}</th>
+                            <th>{i18n('TaskDetail.TaskHistory.date', 'Date')}</th>
+                            <th>{i18n('TaskDetail.TaskHistory.download', 'Download')}</th>
                         </tr>
                     </thead>
                     {
                         history.map(version => {
                             return (
-                                <tr><td>{version.name}</td><td> {version.date}</td><td><a href="#">stahnout</a></td></tr>
+                                <tr><td>{version.name}</td><td> {version.date}</td><td><a>{i18n('TaskDetail.TaskHistory.download', 'Download').toLowerCase()}</a></td></tr>
                             )
                         })
                     }
