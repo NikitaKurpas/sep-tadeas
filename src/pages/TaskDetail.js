@@ -49,10 +49,17 @@ class TaskDetail extends Component {
                 <Button style={{ marginTop: '5px', marginBottom: '5px' }}>Potvrdit odevzdani</Button>
             }
           </div>
+<<<<<<< HEAD
         </Col>
         <Col className="description" xs={10} md={6} sm={12}>{task.definition}</Col>
       </Row>
 
+=======
+        </div>
+        <div className="col-6 description">{task.definition}</div>
+      </div>
+      <Button bsStyle="info">Potvrdit odevzdani</Button>
+>>>>>>> taskhistory
     </div>
   }
 }
