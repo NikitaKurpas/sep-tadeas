@@ -2,13 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
 import { logIn } from '../services/authService'
+import { connect } from 'react-redux'
+import { logInUser } from '../reducers/reducer'
 import './LogIn.css'
 import { Button } from 'react-bootstrap'
 import i18n from '../services/i18n'
 
 class LogIn extends React.Component {
   state = {
-    redirectToReferrer: false,
     username: '',
     password: ''
   }
@@ -24,23 +25,27 @@ class LogIn extends React.Component {
   }
 
   handleSubmit = event => {
+    const { logInUser } = this.props
     event.preventDefault()
-    logIn({username: this.state.username, password: this.state.password}, () => {
-      this.setState({redirectToReferrer: true})
-    })
+    var username = this.state.username;
+    var password = this.state.password;
+    // logIn({ username: this.state.username, password: this.state.password }, () => {
+    //   this.setState({ redirectToReferrer: true })
+    // })
+    logInUser(username, password)
   }
 
-  render () {
-    const {from} = this.props.location.state || {from: {pathname: '/'}}
-    const {redirectToReferrer} = this.state
+  render() {
+    const { from } = this.props.location.state || { from: { pathname: '/' } }
+    const { isLogedIn } = this.props
 
-    if (redirectToReferrer) {
+    if (isLogedIn) {
       return (
-        <Redirect to={from}/>
+        <Redirect to={from} />
       )
     }
 
-    //potreba nastavit po prvnim neuspesnem prihlaseni
+    //TODO in next version
     var loginFail = false
 
     return (
@@ -51,29 +56,29 @@ class LogIn extends React.Component {
             {/* Email */}
             <label htmlFor='username' className='sr-only'>{i18n('LogIn.username', 'Username')}</label>
             <input type='username'
-                   id='username'
-                   name='username'
-                   className='form-control'
-                   placeholder={i18n('LogIn.username', 'Username')}
-                   required
-                   autoFocus
-                   value={this.state.username}
-                   onChange={this.handleInputChange}/>
+              id='username'
+              name='username'
+              className='form-control'
+              placeholder={i18n('LogIn.username', 'Username')}
+              required
+              autoFocus
+              value={this.state.username}
+              onChange={this.handleInputChange} />
             {/* Password */}
             <label htmlFor='password' className='sr-only'>{i18n('LogIn.password', 'Password')}</label>
             <input type='password'
-                   id='password'
-                   name='password'
-                   className='form-control'
-                   placeholder={i18n('LogIn.password', 'Password')}
-                   required
-                   value={this.state.password}
-                   onChange={this.handleInputChange}/>
+              id='password'
+              name='password'
+              className='form-control'
+              placeholder={i18n('LogIn.password', 'Password')}
+              required
+              value={this.state.password}
+              onChange={this.handleInputChange} />
 
             <button className='btn btn-lg btn-primary btn-block'
-                    type='submit'>{i18n('LogIn.signIn', 'Sign in')}</button>
+              type='submit'>{i18n('LogIn.signIn', 'Sign in')}</button>
             <Button className='btn btn-lg btn-primary btn-block'
-                    disabled={!loginFail}>{i18n('LogIn.resetPassword', 'Reset password')}</Button>
+              disabled={!loginFail}>{i18n('LogIn.resetPassword', 'Reset password')}</Button>
           </form>
         </div>
       </div>
@@ -85,4 +90,14 @@ LogIn.propTypes = {
   location: PropTypes.object.isRequired
 }
 
-export default LogIn
+const mapDispatchToProps = {
+  logInUser
+}
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    ...state.reducer
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LogIn)

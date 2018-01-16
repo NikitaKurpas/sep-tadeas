@@ -19,7 +19,7 @@ const Navbar = ({user}) => (
             {/*</li>*/}
           {/*</ul>*/}
         {/*)}/>*/}
-        <Route path='/tasks/:what' render={() => (
+        <Route path='/task/:what' render={() => (
           <ul className='navbar-nav mr-auto'>
             <li className='nav-item active'>
               <Link to='/' className='btn btn-primary'>{i18n('Navbar.taskList', 'Task list')}</Link>

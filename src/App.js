@@ -18,19 +18,19 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <Route path='/' exact render={() => <Redirect to='/tasks'/>} />
-          <Route path='/login' render={props => isLoggedIn() ? <Redirect to='/tasks'/> : <LogIn {...props}/>}/>
+          <Route path='/' exact render={() => <Redirect to='/task'/>} />
+          <Route path='/login' render={props => isLoggedIn() ? <Redirect to='/task'/> : <LogIn {...props}/>}/>
           <Route path='/logout' render={() => {
             logOut();
             return <Redirect to='/login'/>
           }}/>
-          <PrivateRoute path='/tasks' render={props => (
+          <PrivateRoute path='/task' render={props => (
             <Navbar user={user} {...props}/>
           )}/>
-          <PrivateRoute path='/tasks' exact render={props => (
+          <PrivateRoute path='/task' exact render={props => (
             <Dashboard user={user} {...props}/>
           )}/>
-          <PrivateRoute path='/tasks/:id' exact render={props => (
+          <PrivateRoute path='/task/:id' exact render={props => (
             <TaskDetail user={user} {...props}/>
           )}/>
         </div>
