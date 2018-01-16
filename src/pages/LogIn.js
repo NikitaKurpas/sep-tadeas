@@ -3,15 +3,23 @@ import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
 import { logIn } from '../services/authService'
 import { connect } from 'react-redux'
-import { logInUser } from '../reducers/reducer'
+import { bindActionCreators } from 'redux';
+import { logInUser } from '../actions/actions'
 import './LogIn.css'
 import { Button } from 'react-bootstrap'
 import i18n from '../services/i18n'
 
+import * as loginActions from '../actions/actions'
+
 class LogIn extends React.Component {
-  state = {
-    username: '',
-    password: ''
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      username: '',
+      password: '',
+      redirectToReferrer: false,
+    }
   }
 
   handleInputChange = event => {
@@ -19,37 +27,35 @@ class LogIn extends React.Component {
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
 
-    this.setState(Object.assign({}, this.state, {
+
+    this.setState({
       [name]: value
-    }))
+    })
   }
 
   handleSubmit = event => {
-    const { logInUser } = this.props
+    const { actions } = this.props
     event.preventDefault()
     var username = this.state.username;
     var password = this.state.password;
-    // logIn({ username: this.state.username, password: this.state.password }, () => {
-    //   this.setState({ redirectToReferrer: true })
-    // })
-    logInUser(username, password)
+    actions.logInUser(username, password)
   }
 
   render() {
-    const { from } = this.props.location.state || { from: { pathname: '/' } }
-    const { isLogedIn } = this.props
+    const { from } = this.props.ownProps.location.state || { from: { pathname: '/' } }
+    const { isLogedIn, ownProps } = this.props
+    const { redirectToReferrer } = this.state
+
 
     if (isLogedIn) {
-      return (
-        <Redirect to={from} />
-      )
+      this.props.history.push(from)
     }
 
     //TODO in next version
     var loginFail = false
 
     return (
-      <div className='LogIn'>
+      <div className='LogIn' >
         <div className='container'>
           <form className='LogIn-form' onSubmit={this.handleSubmit}>
             <h2 className='LogIn-form-heading'>{i18n('LogIn.heading', 'Please sign in')}</h2>
@@ -90,13 +96,20 @@ LogIn.propTypes = {
   location: PropTypes.object.isRequired
 }
 
-const mapDispatchToProps = {
-  logInUser
+// const mapDispatchToProps = {
+//   logInUser
+// }
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(loginActions, dispatch)
+  }
 }
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    ...state.reducer
+    ...state.reducer,
+    ownProps
   }
 }
 

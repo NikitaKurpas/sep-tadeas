@@ -10,11 +10,11 @@ class TaskDetail extends Component {
   state = {}
 
   componentDidMount () {
-    api(`/task/${this.props.match.params.id}`)
-      .then(body => Promise.all([body, api(`/delivery`)]))
-      .then(([task, delivery]) => {
-        // TODO: idk how to get deliveries for the task...
-      })
+    // api(`/task/${this.props.match.params.id}`)
+    //   .then(body => Promise.all([body, api(`/delivery`)]))
+    //   .then(([task, delivery]) => {
+    //     // TODO: idk how to get deliveries for the task...
+    //   })
   }
 
   render () {

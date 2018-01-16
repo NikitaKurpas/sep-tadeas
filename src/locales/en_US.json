@@ -15,7 +15,8 @@
     "table": {
       "name": "Task name",
       "issuer": "Issuer",
-      "issueDate": "Issue date"
+      "issueDate": "Issue date",
+      "active": "Active"
     }
   },
   "TaskDetail": {
