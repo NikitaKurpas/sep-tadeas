@@ -2,13 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
 import { logIn } from '../services/authService'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux';
-import { logInUser } from '../actions/actions'
 import './LogIn.css'
 import { Button } from 'react-bootstrap'
 import i18n from '../services/i18n'
 
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux';
 import * as loginActions from '../actions/actions'
 
 class LogIn extends React.Component {

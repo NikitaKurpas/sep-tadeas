@@ -5,21 +5,27 @@ import TaskHistory from '../components/TaskHistory'
 import { Button, Row, Col } from 'react-bootstrap'
 import api from '../services/api'
 import i18n from '../services/i18n'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux';
+import * as taskActions from '../actions/actions'
+
 
 class TaskDetail extends Component {
   state = {}
 
-  componentDidMount () {
+  componentDidMount() {
     // api(`/task/${this.props.match.params.id}`)
     //   .then(body => Promise.all([body, api(`/delivery`)]))
     //   .then(([task, delivery]) => {
     //     // TODO: idk how to get deliveries for the task...
     //   })
+    const { actions, ownProps: { match } } = this.props
+    actions.fetchTaskDetail(match.params.id)
   }
 
-  render () {
-    const {task} = this.state
-    const {user} = this.props
+  render() {
+    const { task } = this.state
+    const { user } = this.props
 
     const isTeacher = user.role === 'teacher'
 
@@ -41,20 +47,20 @@ class TaskDetail extends Component {
                 <Button>{i18n('TaskDetail.teacher.no', 'No')}</Button>
               </div>
             ) : (
-              <form className='upload-form'>
-                <div className="form-group">
-                  <label htmlFor="file">{i18n('TaskDetail.uploadButton', 'Upload file')}</label>
-                  <input id="file" name="file" type="file" className="form-control-file"/>
-                </div>
-              </form>
-            )
+                <form className='upload-form'>
+                  <div className="form-group">
+                    <label htmlFor="file">{i18n('TaskDetail.uploadButton', 'Upload file')}</label>
+                    <input id="file" name="file" type="file" className="form-control-file" />
+                  </div>
+                </form>
+              )
           }
           <div>
-            <TaskHistory/>
+            <TaskHistory />
             {
               isTeacher
-                ? <Button style={{marginTop: '5px', marginBottom: '5px'}}>{i18n('TaskDetail.teacher.evaluate', 'Evaluate')}</Button>
-                : <Button style={{marginTop: '5px', marginBottom: '5px'}}>{i18n('TaskDetail.confirmSubmission', 'Confirm submission')}</Button>
+                ? <Button style={{ marginTop: '5px', marginBottom: '5px' }}>{i18n('TaskDetail.teacher.evaluate', 'Evaluate')}</Button>
+                : <Button style={{ marginTop: '5px', marginBottom: '5px' }}>{i18n('TaskDetail.confirmSubmission', 'Confirm submission')}</Button>
             }
           </div>
         </Col>
@@ -70,4 +76,17 @@ TaskDetail.propTypes = {
   isTeacher: PropTypes.bool
 }
 
-export default TaskDetail
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(taskActions, dispatch)
+  }
+}
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    ...state.reducer,
+    ownProps
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskDetail)

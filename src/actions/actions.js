@@ -1,7 +1,8 @@
 //TODO:import api functions
 import {
     logIn,
-    fetchTask
+    fetchTask,
+    fetchDeliveryWindow
 } from '../api/api'
 
 export const LOGIN_USER = "LOGIN_USER"
@@ -49,5 +50,29 @@ export function fetchDashboard() {
             }
         )
 
+    }
+}
+
+export const FETCH_DELIVERY_WINDOW = "FETCH_DELIVERY_WINDOW"
+export const FETCH_DELIVERY_WINDOW_SUCCESS = "FETCH_DELIVERY_WINDOW_SUCCESS"
+export const FETCH_DELIVERY_WINDOW_FAILED = "FETCH_DELIVERY_WINDOW_SUCCESS"
+
+export function fetchWindowBegin() {
+    return { type: FETCH_DELIVERY_WINDOW }
+}
+
+export function fetchWindowSuccess(window) {
+    return { type: FETCH_DASHBOARD_SUCCESS, window }
+}
+
+export function fetchTaskDetail(id) {
+    return function (dispatch) {
+        dispatch(fetchWindowBegin())
+
+        return fetchDeliveryWindow(id).then(
+            data => {
+                dispatch(fetchWindowSuccess(data))
+            }
+        )
     }
 }

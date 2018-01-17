@@ -1,63 +1,18 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './Dashboard.css'
-import { Table, Column, Cell } from 'fixed-data-table-2'
-import { TextCell } from '../components/Cells'
+import { Table } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import i18n from '../services/i18n'
 
 import { bindActionCreators } from 'redux'
 import * as fetchActions from '../actions/actions'
 
-class DataListWrapper {
-  constructor(indexMap, data) {
-    this._indexMap = indexMap;
-    this._data = data;
-  }
-
-  getSize() {
-    return this._indexMap.length;
-  }
-
-  getObjectAt(index) {
-    return this._data.getObjectAt(
-      this._indexMap[index],
-    );
-  }
-}
-
 class Dashboard extends Component {
-  constructor(props) {
-    super(props);
-
-    this._dataList = props.tasks;
-    this.state = {
-      filteredDataList: this._dataList,
-    };
-
-    this._onFilterChange = this._onFilterChange.bind(this);
-  }
-
-  _onFilterChange(e) {
-    if (!e.target.value) {
-      this.setState({
-        filteredDataList: this._dataList,
-      });
-    }
-
-    var filterBy = e.target.value.toLowerCase();
-    var size = this._dataList.getSize();
-    var filteredIndexes = [];
-    for (var index = 0; index < size; index++) {
-      var { firstName } = this._dataList.getObjectAt(index);
-      if (firstName.toLowerCase().indexOf(filterBy) !== -1) {
-        filteredIndexes.push(index);
-      }
-    }
-
-    this.setState({
-      filteredDataList: new DataListWrapper(filteredIndexes, this._dataList),
-    });
+  state = {
+    sortOrder: 1,
+    sortProp: 'name',
+    search: ''
   }
 
   componentDidMount() {
@@ -66,10 +21,16 @@ class Dashboard extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this._dataList = nextProps.tasks;
-    this.setState({
-      filteredDataList: nextProps.tasks
-    })
+    this.setState(Object.assign(this.state, {
+      data: nextProps.tasks
+    }))
+  }
+
+  sortData = prop => event => {
+    this.setState(Object.assign(this.state, {
+      sortOrder: this.state.sortOrder * -1,
+      sortProp: prop
+    }))
   }
 
   handleTaskClick = taskId => event => {
@@ -86,73 +47,65 @@ class Dashboard extends Component {
     }))
   }
 
-
-
-
   render() {
-    const { tasks, loading } = this.props
-    const { data } = this.state
-    var { filteredDataList } = this.state;
+    let data = this.state.data;
 
     // Intermediate state before retrieving data
-    if (!this.state.filteredDataList.length) {
+    if (!data) {
       return (
         <div className="container">Loading...</div>
       )
     }
 
-    console.log("data", this.state.rows)
-    if (!this.state.filteredDataList.length) {
+    if (!data.length) {
       return (
         <div className="container">No tasks</div>
       )
     }
 
-    return (
-      <div className='Dashboard container'>
-        <Table
-          rowHeight={50}
-          rowsCount={filteredDataList.length}
-          headerHeight={50}
-          width={1000}
-          height={500}
-          {...this.props}>
-          <Column
-            columnKey="id"
-            header={<Cell>ID</Cell>}
-            cell={<TextCell data={filteredDataList} />}
-            fixed={true}
-            width={50}
-          />
-          <Column
-            columnKey="name"
-            header={<Cell>{i18n('Dashboard.table.name', 'Task name')}</Cell>}
-            cell={<TextCell data={filteredDataList} />}
-            fixed={true}
-            width={200}
-          />
-          <Column
-            columnKey="issuer"
-            header={<Cell>{i18n('Dashboard.table.issuer', 'Issuer')}</Cell>}
-            cell={<TextCell data={filteredDataList} />}
-            fixed={true}
-            width={200}
-          />
-          <Column
-            columnKey="issueDate"
-            header={<Cell>{i18n('Dashboard.table.issueDate', 'Issue date')}</Cell>}
-            cell={<TextCell data={filteredDataList} />}
-            width={200}
-          />
-          <Column
-            columnKey="active"
-            header={<Cell>{i18n('Dashboard.table.active', 'Active')}</Cell>}
-            cell={<TextCell data={filteredDataList} />}
-            width={60}
-          />
-        </Table>
-      </div>
-    )
+    // filter
+    if (this.state.search && this.state.search.length) {
+      const val = this.state.search.toLowerCase();
+      console.log("data", data)
+      data = data.filter(item => item.name.toLowerCase().includes(val) || item.issuer.toString().toLowerCase().includes(val))
+    }
+    // sort
+    const sortProp = this.state.sortProp;
+    const sortOrder = this.state.sortOrder;
+    data = data.sort((a, b) => a[sortProp] < b[sortProp] ? -1 * sortOrder : a[sortProp] > b[sortProp] ? sortOrder : 0)
+
+    return <div className='Dashboard container'>
+      <form className='form-inline' onSubmit={this.search}>
+        <input type="text"
+          className="form-control mb-2 mr-sm-2 mb-sm-0"
+          placeholder={i18n('Dashboard.searchPlaceholder', 'Search term')}
+          value={this.state.search}
+          onChange={this.handleSearch} />
+        {/*<button type="submit" className='btn btn-outline-primary'>Search</button>*/}
+      </form>
+      <Table className='table table-hover table-bordered'>
+        <thead className='thead-inverse'>
+          <tr>
+            <th onClick={this.sortData('name')}>{i18n('Dashboard.table.name', 'Task name')}</th>
+            <th onClick={this.sortData('issuer')} width='300'>{i18n('Dashboard.table.issuer', 'Issuer')}</th>
+            <th onClick={this.sortData('issueDate')} width='200'>{i18n('Dashboard.table.issueDate', 'Issue date')}</th>
+            <th onClick={this.sortData('active')} width='40' />
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item, key) => (
+            <tr key={key} onClick={this.handleTaskClick(item.id)}>
+              <td>{item.name}</td>
+              <td>{item.issuer}</td>
+              <td>{item.issueDate}</td>
+              <td>
+                <input type='checkbox' checked={item.active} readOnly />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </div>
   }
 }
 
