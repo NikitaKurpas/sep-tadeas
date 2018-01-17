@@ -5,9 +5,14 @@ const TASK_URL = ROOT_URL + '/task';
 const WINDOW_URL = ROOT_URL + '/window'
 
 const sendRequest = (url, config) => {
-    // const { headers } = config;
     console.log("config: ", config);
-    return fetch(url, config)
+    const { headers } = config;
+    // if (headers) {
+    //     headers.set('Session-Id', '54321')
+    // }
+    // var myHeaders = new Headers();
+    // myHeaders.append('Session-Id', '54321')
+    return fetch(url, { 'Session-Id': '54321' })
         .then(res => {
             if (res.ok) {
                 return res.json()
@@ -34,14 +39,14 @@ export function fetchTask() {
 export function fetchDeliveryWindow(id) {
     // var myHeaders = new Headers();
     // myHeaders.append('Session-Id', '54321')
+
+    // console.log("myheaders: ", myHeaders)
+
     return sendRequest(WINDOW_URL + '/' + id,
         {
             method: 'GET',
-            mode: 'no-cors',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
+            headers: new Headers({
                 'Session-Id': '54321'
-            }
+            })
         })
 }
