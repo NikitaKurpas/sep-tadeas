@@ -22,6 +22,8 @@
   "TaskDetail": {
     "by": "By",
     "issueDate": "Issue date",
+    "startDate": "Start date",
+    "deadlineDate": "Deadline date",
     "teacher": {
       "isTaskCompleted": "isTaskCompleted",
       "yes": "Yes",

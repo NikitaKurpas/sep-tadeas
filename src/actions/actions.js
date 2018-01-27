@@ -2,7 +2,9 @@
 import {
     logIn,
     fetchTask,
-    fetchDeliveryWindow
+    fetchDeliveryWindow,
+    requestFetchIssuer,
+    requestFetchWindowHistory
 } from '../api/api'
 
 export const LOGIN_USER = "LOGIN_USER"
@@ -55,14 +57,14 @@ export function fetchDashboard() {
 
 export const FETCH_DELIVERY_WINDOW = "FETCH_DELIVERY_WINDOW"
 export const FETCH_DELIVERY_WINDOW_SUCCESS = "FETCH_DELIVERY_WINDOW_SUCCESS"
-export const FETCH_DELIVERY_WINDOW_FAILED = "FETCH_DELIVERY_WINDOW_SUCCESS"
+export const FETCH_DELIVERY_WINDOW_FAILED = "FETCH_DELIVERY_WINDOW_FAILED"
 
 export function fetchWindowBegin() {
     return { type: FETCH_DELIVERY_WINDOW }
 }
 
 export function fetchWindowSuccess(window) {
-    return { type: FETCH_DASHBOARD_SUCCESS, window }
+    return { type: FETCH_DELIVERY_WINDOW_SUCCESS, window }
 }
 
 export function fetchTaskDetail(id) {
@@ -71,7 +73,56 @@ export function fetchTaskDetail(id) {
 
         return fetchDeliveryWindow(id).then(
             data => {
+                dispatch(fetchIssuer(data.issuer))
                 dispatch(fetchWindowSuccess(data))
+            }
+        )
+    }
+}
+
+export const FETCH_ISSUER = 'FETCH_ISSUER';
+export const FETCH_ISSUER_SUCCESS = 'FETCH_ISSUER_SUCCESS'
+export const FETCH_ISSUER_FAILED = 'FETCH_ISSUER_FAILED'
+
+export function fetchIssuerBegin() {
+    return { type: FETCH_ISSUER }
+}
+
+export function fetchIssuerSuccess(issuer) {
+    return { type: FETCH_ISSUER_SUCCESS, issuer }
+}
+
+export function fetchIssuer(id) {
+    return function (dispatch) {
+        dispatch(fetchIssuerBegin())
+
+        return requestFetchIssuer(id).then(
+            data => {
+                dispatch(fetchIssuerSuccess(data))
+            }
+        )
+    }
+}
+
+export const FETCH_HISTORY_WINDOW = 'FETCH_HISTORY_WINDOW'
+export const FETCH_HISTORY_WINDOW_SUCCESS = 'FETCH_HISTORY_WINDOW_SUCCESS'
+export const FETCH_HISTORY_WINDOW_FAILED = 'FETCH_HISTORY_WINDOW_FAILED'
+
+export function fetchHistoryBegin() {
+    return { type: FETCH_HISTORY_WINDOW }
+}
+
+export function fetchHistorySuccess(windows) {
+    return { type: FETCH_HISTORY_WINDOW_SUCCESS, windows }
+}
+
+export function fetchWindowHistory() {
+    return function (dispatch) {
+        dispatch(fetchHistoryBegin())
+
+        return requestFetchWindowHistory().then(
+            data => {
+                dispatch(fetchHistorySuccess(data))
             }
         )
     }

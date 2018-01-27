@@ -1,19 +1,25 @@
-export const LOGIN_USER = "LOGIN_USER"
-export const LOGIN_USER_SUCCESS = "LOGIN_USER_SUCCESS"
-
-export const FETCH_DASHBOARD = "FETCH_DASHBOARD"
-export const FETCH_DASHBOARD_SUCCESS = "FETCH_DASHBOARD_SUCCESS"
-export const FETCH_DASHBOARD_FAILED = "FETCH_DASHBOARD_FAILED"
-
-export const FETCH_DELIVERY_WINDOW = "FETCH_DELIVERY_WINDOW"
-export const FETCH_DELIVERY_WINDOW_SUCCESS = "FETCH_DELIVERY_WINDOW_SUCCESS"
-export const FETCH_DELIVERY_WINDOW_FAILED = "FETCH_DELIVERY_WINDOW_SUCCESS"
+import {
+    FETCH_ISSUER,
+    FETCH_ISSUER_SUCCESS,
+    LOGIN_USER,
+    LOGIN_USER_SUCCESS,
+    FETCH_DASHBOARD,
+    FETCH_DASHBOARD_SUCCESS,
+    FETCH_DASHBOARD_FAILED,
+    FETCH_DELIVERY_WINDOW,
+    FETCH_DELIVERY_WINDOW_SUCCESS,
+    FETCH_DELIVERY_WINDOW_FAILED,
+    FETCH_HISTORY_WINDOW,
+    FETCH_HISTORY_WINDOW_SUCCESS
+} from "../actions/actions";
 
 const defaultState = {
     loading: false,
     isLogedIn: false,
+    activeWindowId: null,
     user: {},
-    tasks: []
+    tasks: [],
+    windowHistory: []
 }
 
 export default function reducer(state = defaultState, action) {
@@ -48,12 +54,42 @@ export default function reducer(state = defaultState, action) {
             }
         case FETCH_DELIVERY_WINDOW_SUCCESS:
             var indexOfTask = state.tasks.findIndex(i => i.id == action.window.id)
+            console.log("indexOfTask", indexOfTask, "action.window:", action.window)
             return {
                 ...state,
-                tasks: [
-                    ...state.tasks,
-                    [indexOfTask] = action.window
-                ]
+                activeWindowId: indexOfTask,
+                tasks: state.tasks.map((task, index) => {
+                    if (index == indexOfTask) {
+                        return action.window
+                    }
+                    return task
+                })
+            }
+        case FETCH_ISSUER:
+            return {
+                ...state,
+                loading: true
+            }
+        case FETCH_ISSUER_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                issuer: action.issuer
+            }
+        case FETCH_HISTORY_WINDOW:
+            return {
+                ...state,
+                loading: true
+            }
+        case FETCH_HISTORY_WINDOW_SUCCESS:
+            return {
+                ...state,
+                windowHistory: action.windows.reduce((accumulator, window) => {
+                    if (window.deliveryUser == state.user.id) {
+                        accumulator.push(window)
+                        return accumulator
+                    }
+                }, [])
             }
         default:
             return state;

@@ -21,15 +21,18 @@ class TaskDetail extends Component {
     //   })
     const { actions, ownProps: { match } } = this.props
     actions.fetchTaskDetail(match.params.id)
+    actions.fetchWindowHistory()
   }
 
   render() {
-    const { task } = this.state
-    const { user } = this.props
+    // const { task } = this.state
+    const { user, tasks, activeWindowId, issuer, loading, windowHistory } = this.props
+
+    var task = tasks[activeWindowId]
 
     const isTeacher = user.role === 'teacher'
 
-    if (!task) {
+    if (!task || loading) {
       return <div className="container">Loading...</div>
     }
 
@@ -37,8 +40,10 @@ class TaskDetail extends Component {
       <Row>
         <Col xs={12} md={6} sm={12}>
           <h2>{task.name}</h2>
-          <h4>{i18n('TaskDetail.by', "By")} {task.issuer}</h4>
+          <h4>{i18n('TaskDetail.by', "By")} {issuer.firstName + ' ' + issuer.lastName}</h4>
           <h6>{i18n('TaskDetail.issueDate', 'Issue Date')}: {task.issueDate}</h6>
+          <h6>{i18n('TaskDetail.startDate', 'Start date')}: {task.startDate}</h6>
+          <h6>{i18n('TaskDetail.deadlineDate', 'Deadline Date')}: {task.deadlineDate}</h6>
           {
             isTeacher ? (
               <div className="acceptTask">
@@ -56,7 +61,7 @@ class TaskDetail extends Component {
               )
           }
           <div>
-            <TaskHistory />
+            <TaskHistory windowHistory={windowHistory} />
             {
               isTeacher
                 ? <Button style={{ marginTop: '5px', marginBottom: '5px' }}>{i18n('TaskDetail.teacher.evaluate', 'Evaluate')}</Button>
@@ -66,7 +71,6 @@ class TaskDetail extends Component {
         </Col>
         <Col className="description" xs={10} md={6} sm={12}>{task.definition}</Col>
       </Row>
-
     </div>
   }
 }
