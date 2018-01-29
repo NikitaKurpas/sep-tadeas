@@ -12,6 +12,8 @@ import utils.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.io.FileReader;
+import java.nio.file.FileSystem;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
@@ -32,7 +34,7 @@ public class LoginTestParametrized {
 
   @Parameterized.Parameters(name = "User no: {index}, username: {0}, password: {1}")
   public static Collection<String[]> testingData() {
-    return CSVfileReader.readCSVfileToCollection("resources/login_credentials.csv");
+    return CSVfileReader.readCSVfileToCollection("target/classes/login_credentials.csv");
   }
 
   @BeforeClass
@@ -54,6 +56,7 @@ public class LoginTestParametrized {
     }
     TaskListPage tasks = new TaskListPage(driver);
     Assert.assertTrue(tasks.getTaskList().isDisplayed());
+    tasks.signOut();
 
   }
 

@@ -13,7 +13,6 @@ import java.util.List;
 
 public class CSVfileReader {
 
-
     // for TestNG data provider
     public static Iterator<String[]> readCSVfileToIterator(String fileName) {
         List<String[]> records = new ArrayList<String[]>();
@@ -36,9 +35,6 @@ public class CSVfileReader {
         }
     }
 
-
-
-
     // for JUnit data provider
     public static Collection<String[]> readCSVfileToCollection(String fileName) {
         List<String[]> records = new ArrayList<String[]>();
@@ -60,13 +56,5 @@ public class CSVfileReader {
             return null;
         }
     }
-
-
-
-    public static void main(String[] args) {
-        CSVfileReader test = new CSVfileReader();
-        System.out.println(test.readCSVfileToIterator("C:\\temp3\\item_data.csv"));
-    }
-
 
 }
