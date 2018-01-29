@@ -1,22 +1,16 @@
 package selenium_tests.src.po;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class TaskListPage {
+public class DeliveryPage {
 
   private final WebDriver driver;
   private final WebDriverWait wait;
 
-  @FindBy(xpath = "//*[@id=\"root\"]/div/div/table")
-  private WebElement taskList;
-
-  @FindBy(xpath = "//*[@id=\"root\"]/div/div/form/input")
-  private WebElement searchTasks;
 
   @FindBy(xpath = "//*[@id=\"root\"]/div/nav/div/a")
   private WebElement signOutButton;
@@ -24,10 +18,17 @@ public class TaskListPage {
   @FindBy(xpath = "//*[@id=\"root\"]/div/nav/div/span")
   private WebElement userLabel;
 
-  @FindBy(xpath = "//*[@id=\"root\"]/div/nav/div/div/ul/li/a")
-  private WebElement taskListButton;
+  @FindBy(xpath = "//*[@id=\"file\"]")
+  private WebElement chooseFileButton;
 
-  public TaskListPage(final WebDriver driver) {
+  @FindBy(xpath = "//*[@id=\"root\"]/div/div/div/div[1]")
+  private WebElement taskDetail;
+
+  @FindBy(xpath = "//*[@id=\"root\"]/div/div/div/div[1]/div/button")
+  private WebElement confirmButton;
+
+
+  public DeliveryPage(final WebDriver driver) {
     this.driver = driver;
     PageFactory.initElements(driver, this);
     this.wait = new WebDriverWait(driver, 30);
@@ -41,18 +42,8 @@ public class TaskListPage {
     this.signOutButton.click();
   }
 
-  public void openDelivery(int number) {
-    WebElement delivery = this.driver.findElement(By.xpath(
-      "//*[@id=\"root\"]/div/div/table/tbody/tr[" + number + "]/td[" + number + "]"));
-    delivery.click();
-  }
-
-  public void goToTasks() {
-    taskListButton.click();
-  }
-
-  public WebElement getTaskList() {
-    return taskList;
+  public WebElement getTaskDetail() {
+    return taskDetail;
   }
 
 }

@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -25,9 +26,6 @@ public class LoginPage {
   @FindBy(xpath = "//*[@id=\"root\"]/div/div/div/form/button[2]")
   private WebElement resetButton;
 
-  @FindBy(xpath = "table")
-  private WebElement tasksTable;
-
   public LoginPage(final WebDriver driver) {
     this.driver = driver;
     PageFactory.initElements(driver, this);
@@ -43,15 +41,13 @@ public class LoginPage {
     this.passwordInput.clear();
 
     this.usernameInput.sendKeys(username);
-    this.passwordInput.sendKeys(password);
-    System.out.println("Sent username: " + username);
-    System.out.println("Sent password: " + password);
+
+    System.out.println("Sent username: " + usernameInput.getAttribute("value"));
+
+    this.passwordInput.sendKeys(Keys.NUMPAD1, Keys.NUMPAD2, Keys.NUMPAD3, Keys.NUMPAD4, Keys.NUMPAD5);
+    System.out.println("Sent password: " + passwordInput.getAttribute("value"));
     wait.until(ExpectedConditions.elementToBeClickable(this.signInButton));
     this.signInButton.click();
-  }
-
-  public WebElement getTable() {
-    return this.tasksTable;
   }
 
   public boolean isAlertPresent() {
