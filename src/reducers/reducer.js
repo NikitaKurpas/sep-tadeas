@@ -84,12 +84,13 @@ export default function reducer(state = defaultState, action) {
         case FETCH_HISTORY_WINDOW_SUCCESS:
             return {
                 ...state,
-                windowHistory: action.windows.reduce((accumulator, window) => {
-                    if (window.deliveryUser == state.user.id) {
-                        accumulator.push(window)
-                        return accumulator
-                    }
-                }, [])
+                // windowHistory: action.windows.reduce((accumulator, window) => {
+                //     if (window.deliveryUser == state.user.id) {
+                //         accumulator.push(window)
+                //         return accumulator
+                //     }
+                // }, [])
+                windowHistory: action.windows
             }
         default:
             return state;

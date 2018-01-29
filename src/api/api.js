@@ -17,6 +17,7 @@ const sendRequest = (url, config) => {
     return fetch(url, config)
         .then(res => {
             if (res.ok) {
+                console.log("result je", res);
                 return res.json()
             }
 
