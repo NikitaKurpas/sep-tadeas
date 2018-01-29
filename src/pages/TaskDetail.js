@@ -30,7 +30,7 @@ class TaskDetail extends Component {
 
     var task = tasks[activeWindowId]
 
-    const isTeacher = user.role === 'teacher'
+    const isTeacher = user.UserRole === 'teacher'
 
     if (!task || loading) {
       return <div className="container">Loading...</div>
