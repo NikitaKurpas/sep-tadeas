@@ -9,9 +9,9 @@ export default function configureStore(initialState) {
         rootReducer,
         initialState,
         // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-        // window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__(
-        //     applyMiddleware(thunk, reduxImmutableStateInvariant())
-        // )
-        compose(applyMiddleware(thunk, reduxImmutableStateInvariant()))
+        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__(
+            applyMiddleware(thunk, reduxImmutableStateInvariant())
+        )
+        // compose(applyMiddleware(thunk, reduxImmutableStateInvariant()))
     );
 }
