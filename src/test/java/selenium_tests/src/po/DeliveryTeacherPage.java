@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class DeliveryPage {
+public class DeliveryTeacherPage {
 
   private final WebDriver driver;
   private final WebDriverWait wait;
@@ -28,7 +28,7 @@ public class DeliveryPage {
   private WebElement confirmButton;
 
 
-  public DeliveryPage(final WebDriver driver) {
+  public DeliveryTeacherPage(final WebDriver driver) {
     this.driver = driver;
     PageFactory.initElements(driver, this);
     this.wait = new WebDriverWait(driver, 30);
