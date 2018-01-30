@@ -1,6 +1,7 @@
 package selenium_tests.src.po;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -38,7 +39,9 @@ public class TaskListPage {
   }
 
   public void signOut() {
-    this.signOutButton.click();
+    //    this.signOutButton.click(); // TODO! change to sign out when working
+    driver.findElements(By.xpath("//body")).
+      get(0).sendKeys(Keys.chord(Keys.COMMAND, "R"));
   }
 
   public void openDelivery(int number) {

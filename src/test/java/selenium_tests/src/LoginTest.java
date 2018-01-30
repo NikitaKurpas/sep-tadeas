@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@SuppressWarnings("Duplicates")
 public class LoginTest {
 
   private static WebDriver driver;

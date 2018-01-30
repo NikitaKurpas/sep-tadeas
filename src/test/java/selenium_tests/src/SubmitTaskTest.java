@@ -14,8 +14,7 @@ import selenium_tests.src.po.TaskListPage;
 import java.net.MalformedURLException;
 import java.util.concurrent.TimeUnit;
 
-@SuppressWarnings("Duplicates")
-public class SelectTaskTest {
+public class SubmitTaskTest {
 
   private static WebDriver driver;
   private static TaskListPage tasks;
