@@ -48,9 +48,9 @@ export function fetchDeliveryWindow(id) {
     return sendRequest(WINDOW_URL + '/' + id,
         {
             method: 'GET',
-            // headers: {
-            //     'Session-Id': '54321'
-            // }
+            headers: {
+                'session-id': '54321'
+            }
         })
 }
 
