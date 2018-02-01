@@ -16,20 +16,19 @@ class App extends Component {
     // if (isLoggedIn()) {
     //   user = getUser()
     // }
-    const { isLogedIn, user } = this.props;
-    console.log("route islogedin", isLogedIn)
+    const { user } = this.props;
     return (
       <Router>
         <div>
           <Route path='/' exact render={() => <Redirect to='/task' />} />
-          <Route path='/login' render={props => isLogedIn ? <Redirect to='/task' /> : <LogIn {...props} />} />
+          <Route path='/login' render={props => isLoggedIn() ? <Redirect to='/task' /> : <LogIn {...props} />} />
           <Route path='/logout' render={() => {
             logOut();
             return <Redirect to='/login' />
           }} />
-          <PrivateRoute path='/task' component={Navbar} isAuthenticated={isLogedIn} />
-          <PrivateRoute path='/task' exact component={Dashboard} isAuthenticated={isLogedIn} />
-          <PrivateRoute path='/task/:id' exact component={TaskDetail} isAuthenticated={isLogedIn} />
+          <PrivateRoute path='/task' component={Navbar} isAuthenticated={isLoggedIn()} />
+          <PrivateRoute path='/task' exact component={Dashboard} isAuthenticated={isLoggedIn()} />
+          <PrivateRoute path='/task/:id' exact component={TaskDetail} isAuthenticated={isLoggedIn()} />
         </div>
       </Router>
     )

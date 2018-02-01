@@ -38,6 +38,7 @@ class LogIn extends React.Component {
     var username = this.state.username;
     var password = this.state.password;
     actions.logInUser(username, password)
+    this.setState({ redirectToReferrer: true })
   }
 
   render() {
@@ -46,8 +47,14 @@ class LogIn extends React.Component {
     const { redirectToReferrer } = this.state
 
 
-    if (isLogedIn) {
-      this.props.history.push(from)
+    // if (isLogedIn) {
+    //   this.props.history.push(from)
+    // }
+
+    if (redirectToReferrer) {
+      return (
+        <Redirect to={from} />
+      )
     }
 
     //TODO in next version

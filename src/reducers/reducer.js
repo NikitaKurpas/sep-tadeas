@@ -46,6 +46,10 @@ export default function reducer(state = defaultState, action) {
                 ...state,
                 loading: false,
                 tasks: Object.assign([], action.tasks)
+                // tasks: action.tasks.reduce((accumulator, task) => {
+                //     accumulator[task.id] = task
+                //     return accumulator
+                // })
             };
         case FETCH_DELIVERY_WINDOW:
             return {

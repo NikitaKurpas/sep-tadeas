@@ -36,6 +36,7 @@
       "download": "Download"
     },
     "uploadButton": "Upload file",
+    "saveFile": "Save file",
     "confirmSubmission": "Confirm submission"
   }
 }

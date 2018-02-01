@@ -1,3 +1,5 @@
+import md5 from 'md5'
+
 const ROOT_URL = 'http://localhost:8081';
 
 const LOGIN_URL = ROOT_URL + '/user/login?username=';
@@ -6,27 +8,40 @@ const WINDOW_URL = ROOT_URL + '/window';
 const USER_URL = ROOT_URL + '/user/';
 const DELIVERY_URL = ROOT_URL + '/delivery'
 
-const sendRequest = (url, config) => {
-    console.log("config: ", config);
-    const { headers } = config;
-    // if (headers) {
-    //     headers.set('Session-Id', '54321')
-    // }
-    // var myHeaders = new Headers();
-    // myHeaders.append('Session-Id', '54321')
-    return fetch(url, config)
-        .then(res => {
-            if (res.ok) {
-                console.log("result je", res);
-                return res.json()
-            }
+const checkResponseStatus = (response) => {
+    console.info("request checking status: ", response);
+    if (response.status == 401) {
+        console.info("-> unathorized")
+        throw { error: "Unauthorized" };
+    } else if (response.status < 200 || response.status > 299) {
+        console.info("-> status is < 200 or > 299");
+        throw response.json();
+    } else {
+        console.info("-> status ok")
+        return response;
+    }
+}
 
-            throw new Error('Connection error')
+const sendRequest = (url, config) => {
+    return fetch(url, config)
+        .then(checkResponseStatus)
+        .then(response => response.json())
+        .then(anything => {
+            console.error("fetch returns: ", anything)
+            return anything;
         })
+    //         .then(res => {
+    //             if (res.ok) {
+    //                 return res.json()
+    //             }
+
+    //             throw new Error('Connection error')
+    //         })
 }
 
 export function logIn(username, password) {
-    return sendRequest(LOGIN_URL + username + '&password=' + password,
+    var hashPass = md5(password);
+    return sendRequest(LOGIN_URL + username + '&password=' + hashPass,
         {
             method: 'GET'
         })
@@ -35,15 +50,14 @@ export function logIn(username, password) {
 export function fetchTask() {
     return sendRequest(TASK_URL,
         {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'session-id': '54321'
+            }
         })
 }
 
 export function fetchDeliveryWindow(id) {
-    // var myHeaders = new Headers();
-    // myHeaders.append('Session-Id', '54321')
-
-    // console.log("myheaders: ", myHeaders)
 
     return sendRequest(WINDOW_URL + '/' + id,
         {
@@ -56,12 +70,18 @@ export function fetchDeliveryWindow(id) {
 
 export function requestFetchWindowHistory() {
     return sendRequest(DELIVERY_URL, {
-        method: 'GET'
+        method: 'GET',
+        headers: {
+            'session-id': '54321'
+        }
     })
 }
 
 export function requestFetchIssuer(id) {
     return sendRequest(USER_URL + id, {
-        method: 'GET'
+        method: 'GET',
+        headers: {
+            'session-id': '54321'
+        }
     })
 }

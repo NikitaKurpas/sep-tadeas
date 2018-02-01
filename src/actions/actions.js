@@ -23,7 +23,11 @@ export function logInUser(username, password) {
         dispatch(logInUserBegin())
 
         return logIn(username, password).then(
-            user => dispatch(logInUserSuccess(user))
+            user => {
+                dispatch(logInUserSuccess(user))
+                localStorage.setItem('tadeas-session-id', user.sessionId)
+                localStorage.setItem('tadeas-user', user)
+            }
         ).catch(error => {
             throw (error);
         });

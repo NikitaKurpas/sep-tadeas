@@ -11,21 +11,13 @@ import * as taskActions from '../actions/actions'
 
 
 class TaskDetail extends Component {
-  state = {}
-
   componentDidMount() {
-    // api(`/task/${this.props.match.params.id}`)
-    //   .then(body => Promise.all([body, api(`/delivery`)]))
-    //   .then(([task, delivery]) => {
-    //     // TODO: idk how to get deliveries for the task...
-    //   })
     const { actions, ownProps: { match } } = this.props
     actions.fetchTaskDetail(match.params.id)
     actions.fetchWindowHistory()
   }
 
   render() {
-    // const { task } = this.state
     const { user, tasks, activeWindowId, issuer, loading, windowHistory } = this.props
 
     var task = tasks[activeWindowId]
@@ -58,6 +50,7 @@ class TaskDetail extends Component {
                     <input id="file" name="file" type="file" className="form-control-file" />
                   </div>
                 </form>
+                <Button>{i18n('TaskDetail.saveFile', 'Save file')}</Button>
               )
           }
           <div>
