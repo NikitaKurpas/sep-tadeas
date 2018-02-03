@@ -37,6 +37,7 @@
     },
     "uploadButton": "Upload file",
     "saveFile": "Save file",
-    "confirmSubmission": "Confirm submission"
+    "confirmSubmission": "Confirm submission",
+    "uploadMessage": "Try dropping some files here, or click to select files to upload. Only *.zip and *.rar archives will be accepted"
   }
 }

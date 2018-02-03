@@ -14,12 +14,23 @@ class LogIn extends React.Component {
   constructor(props) {
     super(props)
 
+    this.handleSubmit = this.handleSubmit.bind(this)
+
     this.state = {
       username: '',
       password: '',
       redirectToReferrer: false,
     }
   }
+
+  // componentWillReceiveProps(nextProps) {
+  //   console.log("nove props: ", nextProps)
+  //   if (nextProps.isLogedIn) {
+  //     this.setState({
+  //       redirectToReferrer: true
+  //     })
+  //   }
+  // }
 
   handleInputChange = event => {
     const target = event.target

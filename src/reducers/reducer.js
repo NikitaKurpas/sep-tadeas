@@ -10,7 +10,10 @@ import {
     FETCH_DELIVERY_WINDOW_SUCCESS,
     FETCH_DELIVERY_WINDOW_FAILED,
     FETCH_HISTORY_WINDOW,
-    FETCH_HISTORY_WINDOW_SUCCESS
+    FETCH_HISTORY_WINDOW_SUCCESS,
+    PUSH_DELIVERY,
+    PUSH_DELIVERY_SUCCESS,
+    LOGOUT_USER
 } from "../actions/actions";
 
 const defaultState = {
@@ -93,8 +96,16 @@ export default function reducer(state = defaultState, action) {
                 //         accumulator.push(window)
                 //         return accumulator
                 //     }
-                // }, [])
+                // }, [])                
                 windowHistory: action.windows
+            }
+        case PUSH_DELIVERY_SUCCESS:
+            return {
+                ...state,
+                windowHistory: [
+                    ...state.windowHistory,
+                    action.delivery
+                ]
             }
         default:
             return state;

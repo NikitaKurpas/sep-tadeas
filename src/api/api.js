@@ -41,6 +41,7 @@ const sendRequest = (url, config) => {
 
 export function logIn(username, password) {
     var hashPass = md5(password);
+    console.log("hash", hashPass)
     return sendRequest(LOGIN_URL + username + '&password=' + hashPass,
         {
             method: 'GET'
@@ -83,5 +84,17 @@ export function requestFetchIssuer(id) {
         headers: {
             'session-id': '54321'
         }
+    })
+}
+
+export function requestPushDelivery(delivery) {
+    return sendRequest(DELIVERY_URL, {
+        method: 'POST',
+        headers: {
+            'session-id': '54321'
+        },
+        body: JSON.stringify(
+            delivery
+        )
     })
 }

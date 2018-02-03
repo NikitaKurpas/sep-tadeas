@@ -4,8 +4,11 @@ import {
     fetchTask,
     fetchDeliveryWindow,
     requestFetchIssuer,
-    requestFetchWindowHistory
+    requestFetchWindowHistory,
+    requestPushDelivery
 } from '../api/api'
+
+import toastr from 'toastr'
 
 export const LOGIN_USER = "LOGIN_USER"
 export const LOGIN_USER_SUCCESS = "LOGIN_USER_SUCCESS"
@@ -24,9 +27,9 @@ export function logInUser(username, password) {
 
         return logIn(username, password).then(
             user => {
-                dispatch(logInUserSuccess(user))
                 localStorage.setItem('tadeas-session-id', user.sessionId)
                 localStorage.setItem('tadeas-user', user)
+                dispatch(logInUserSuccess(user))
             }
         ).catch(error => {
             throw (error);
@@ -36,7 +39,6 @@ export function logInUser(username, password) {
 
 export const FETCH_DASHBOARD = "FETCH_DASHBOARD"
 export const FETCH_DASHBOARD_SUCCESS = "FETCH_DASHBOARD_SUCCESS"
-export const FETCH_DASHBOARD_FAILED = "FETCH_DASHBOARD_FAILED"
 
 export function fetchDashboardBegin() {
     return { type: FETCH_DASHBOARD }
@@ -61,7 +63,6 @@ export function fetchDashboard() {
 
 export const FETCH_DELIVERY_WINDOW = "FETCH_DELIVERY_WINDOW"
 export const FETCH_DELIVERY_WINDOW_SUCCESS = "FETCH_DELIVERY_WINDOW_SUCCESS"
-export const FETCH_DELIVERY_WINDOW_FAILED = "FETCH_DELIVERY_WINDOW_FAILED"
 
 export function fetchWindowBegin() {
     return { type: FETCH_DELIVERY_WINDOW }
@@ -86,7 +87,6 @@ export function fetchTaskDetail(id) {
 
 export const FETCH_ISSUER = 'FETCH_ISSUER';
 export const FETCH_ISSUER_SUCCESS = 'FETCH_ISSUER_SUCCESS'
-export const FETCH_ISSUER_FAILED = 'FETCH_ISSUER_FAILED'
 
 export function fetchIssuerBegin() {
     return { type: FETCH_ISSUER }
@@ -110,7 +110,6 @@ export function fetchIssuer(id) {
 
 export const FETCH_HISTORY_WINDOW = 'FETCH_HISTORY_WINDOW'
 export const FETCH_HISTORY_WINDOW_SUCCESS = 'FETCH_HISTORY_WINDOW_SUCCESS'
-export const FETCH_HISTORY_WINDOW_FAILED = 'FETCH_HISTORY_WINDOW_FAILED'
 
 export function fetchHistoryBegin() {
     return { type: FETCH_HISTORY_WINDOW }
@@ -129,5 +128,31 @@ export function fetchWindowHistory() {
                 dispatch(fetchHistorySuccess(data))
             }
         )
+    }
+}
+
+export const PUSH_DELIVERY = 'PUSH_DELIVERY'
+export const PUSH_DELIVERY_SUCCESS = 'PUSH_DELIVERY_SUCCESS'
+
+export function pushDeliveryBegin() {
+    return { type: PUSH_DELIVERY }
+}
+
+export function pushDeliverySuccess(delivery) {
+    return { type: PUSH_DELIVERY_SUCCESS, delivery }
+}
+
+export function pushDelivery(delivery) {
+    return function (dispatch) {
+        dispatch(pushDeliveryBegin())
+
+        return requestPushDelivery(delivery).then(
+            data => {
+                toastr.success(data.message)
+                dispatch(pushDeliverySuccess(delivery))
+            }).catch(
+            error => {
+                toastr.error(error.message)
+            })
     }
 }
