@@ -34,7 +34,6 @@ class Dashboard extends Component {
   }
 
   handleTaskClick = taskId => event => {
-    console.log(taskId);
     this.props.history.push(`/task/${taskId}`)
   }
 
@@ -66,7 +65,6 @@ class Dashboard extends Component {
     // filter
     if (this.state.search && this.state.search.length) {
       const val = this.state.search.toLowerCase();
-      console.log("data", data)
       data = data.filter(item => item.name.toLowerCase().includes(val) || item.issuer.toString().toLowerCase().includes(val))
     }
     // sort

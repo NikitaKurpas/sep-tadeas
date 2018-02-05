@@ -22,14 +22,11 @@ class LogIn extends React.Component {
     }
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   console.log("nove props: ", nextProps)
-  //   if (nextProps.isLogedIn) {
-  //     this.setState({
-  //       redirectToReferrer: true
-  //     })
-  //   }
-  // }
+  componentWillMount(){
+    this.setState({
+      redirectToReferrer: false
+    })
+  }
 
   handleInputChange = event => {
     const target = event.target

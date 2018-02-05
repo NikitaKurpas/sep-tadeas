@@ -124,7 +124,6 @@ class TaskDetail extends Component {
                         return <p>This file is unsupported</p>
                       }
                       if (acceptedFiles.length) {
-                        console.log("test: ", this.state.test)
                         return <span><img src={this.state.file[0].preview} alt={this.state.file[0].name} /> {this.state.file[0].name}</span>
                       }
                       if (rejectedFiles.length) {

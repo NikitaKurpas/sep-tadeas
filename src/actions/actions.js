@@ -171,7 +171,6 @@ export function fetchUser() {
     return function (dispatch) {
         var user = localStorage.getItem('tadeas-user')
         user = JSON.parse(user)
-        console.log("user", user)
         dispatch(fetchUserBegin(user))
     }
 }
