@@ -31,8 +31,13 @@ export function logInUser(username, password) {
                 localStorage.setItem('tadeas-user', user)
                 dispatch(logInUserSuccess(user))
             }
-        ).catch(error => {
-            throw (error);
+        ).catch(async error => {
+            var mes = await error;
+            if (mes.errorMessage) {
+                toastr.error("Wrong username or password")
+            } else {
+                toastr.error("Cannot connect to server");
+            }
         });
     }
 }
