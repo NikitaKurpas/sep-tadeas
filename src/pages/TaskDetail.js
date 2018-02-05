@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import './TaskDetail.css'
 import TaskHistory from '../components/TaskHistory'
 import { Button, Row, Col } from 'react-bootstrap'
-import api from '../services/api'
 import i18n from '../services/i18n'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
@@ -82,8 +81,7 @@ class TaskDetail extends Component {
       return <div className="container">Loading...</div>
     }
 
-    console.log("user.id != task.solver: ", user.id != task.solver, "user.id ", user.id, "task.solver ", task.solver)
-    if (task.solver && (user.id != task.solver)) {
+    if (task.solver && (user.id !== task.solver)) {
       toastr.error("You do not have permission to this task")
       this.props.history.push('/task')
     }
@@ -127,7 +125,7 @@ class TaskDetail extends Component {
                       }
                       if (acceptedFiles.length) {
                         console.log("test: ", this.state.test)
-                        return <span><img src={this.state.file[0].preview} /> {this.state.file[0].name}</span>
+                        return <span><img src={this.state.file[0].preview} alt={this.state.file[0].name} /> {this.state.file[0].name}</span>
                       }
                       if (rejectedFiles.length) {
                         return `Unsuported file`

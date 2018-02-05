@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, Redirect, Switch, withRouter } from 'react-router-dom'
-import { isLoggedIn, logOut, getUser } from './services/authService'
+import { BrowserRouter as Router, Route, Redirect} from 'react-router-dom'
+import { isLoggedIn, logOut } from './services/authService'
 import PrivateRoute from './components/PrivateRoute'
 import Navbar from './components/Navbar.js'
 import LogIn from './pages/LogIn'
@@ -12,11 +12,6 @@ import { connect } from 'react-redux'
 
 class App extends Component {
   render() {
-    // let user = void 0;
-    // if (isLoggedIn()) {
-    //   user = getUser()
-    // }
-    const { user } = this.props;
     return (
       <Router>
         <div>

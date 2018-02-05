@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
-import { logIn } from '../services/authService'
 import './LogIn.css'
 import { Button } from 'react-bootstrap'
 import i18n from '../services/i18n'
@@ -54,7 +53,7 @@ class LogIn extends React.Component {
 
   render() {
     const { from } = this.props.ownProps.location.state || { from: { pathname: '/' } }
-    const { isLogedIn, ownProps } = this.props
+    // const { isLogedIn, ownProps } = this.props
     const { redirectToReferrer } = this.state
 
 

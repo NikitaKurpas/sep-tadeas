@@ -31,12 +31,14 @@ class TaskHistory extends Component {
                     <tbody>
                         {
                             windowHistory.map(version => {
-                                if (windowId === version.taskDeliveryWindow)
+                                if (windowId === version.taskDeliveryWindow) {
                                     return (
                                         <tr key={version.id}>
                                             {/*<td>{version.name}</td>*/}
                                             <td> {version.deliveryDate}</td><td><a>{i18n('TaskDetail.TaskHistory.download', 'Download').toLowerCase()}</a></td></tr>
                                     )
+                                }
+                                return null
                             })
                         }
                     </tbody>

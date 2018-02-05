@@ -5,15 +5,11 @@ import {
     LOGIN_USER_SUCCESS,
     FETCH_DASHBOARD,
     FETCH_DASHBOARD_SUCCESS,
-    FETCH_DASHBOARD_FAILED,
     FETCH_DELIVERY_WINDOW,
     FETCH_DELIVERY_WINDOW_SUCCESS,
-    FETCH_DELIVERY_WINDOW_FAILED,
     FETCH_HISTORY_WINDOW,
     FETCH_HISTORY_WINDOW_SUCCESS,
-    PUSH_DELIVERY,
     PUSH_DELIVERY_SUCCESS,
-    LOGOUT_USER,
     FETCH_USER
 } from "../actions/actions";
 
@@ -61,12 +57,12 @@ export default function reducer(state = defaultState, action) {
                 loading: true
             }
         case FETCH_DELIVERY_WINDOW_SUCCESS:
-            var indexOfTask = state.tasks.findIndex(i => i.id == action.window.id)
+            var indexOfTask = state.tasks.findIndex(i => i.id === action.window.id)
             return {
                 ...state,
                 activeWindowId: indexOfTask,
                 tasks: state.tasks.map((task, index) => {
-                    if (index == indexOfTask) {
+                    if (index === indexOfTask) {
                         return action.window
                     }
                     return task
