@@ -1,4 +1,3 @@
-//TODO:import api functions
 import {
     logIn,
     fetchTask,
@@ -27,8 +26,8 @@ export function logInUser(username, password) {
 
         return logIn(username, password).then(
             user => {
-                localStorage.setItem('tadeas-session-id', user.sessionId)
-                localStorage.setItem('tadeas-user', user)
+                localStorage.setItem('tadeas-session-id', JSON.stringify(user.sessionId))
+                localStorage.setItem('tadeas-user', JSON.stringify(user))
                 dispatch(logInUserSuccess(user))
             }
         ).catch(async error => {
@@ -159,5 +158,20 @@ export function pushDelivery(delivery) {
             error => {
                 toastr.error(error.message)
             })
+    }
+}
+
+export const FETCH_USER = 'FETCH_USER'
+
+export function fetchUserBegin(user) {
+    return { type: FETCH_USER, user }
+}
+
+export function fetchUser() {
+    return function (dispatch) {
+        var user = localStorage.getItem('tadeas-user')
+        user = JSON.parse(user)
+        console.log("user", user)
+        dispatch(fetchUserBegin(user))
     }
 }

@@ -30,13 +30,6 @@ const sendRequest = (url, config) => {
             console.error("fetch returns: ", anything)
             return anything;
         })
-    //         .then(res => {
-    //             if (res.ok) {
-    //                 return res.json()
-    //             }
-
-    //             throw new Error('Connection error')
-    //         })
 }
 
 export function logIn(username, password) {

@@ -22,8 +22,15 @@ class TaskDetail extends Component {
     this.state = { file: [] }
   }
 
-  componentDidMount() {
-    const { actions, ownProps: { match } } = this.props
+  componentWillMount() {
+    const { actions, ownProps: { match }, user, tasks } = this.props
+    if (!user.id) {
+      actions.fetchUser()
+    }
+    if (!tasks.length) {
+      actions.fetchDashboard()
+    }
+
     actions.fetchTaskDetail(match.params.id)
     actions.fetchWindowHistory()
   }
@@ -73,6 +80,12 @@ class TaskDetail extends Component {
 
     if (!task || loading) {
       return <div className="container">Loading...</div>
+    }
+
+    console.log("user.id != task.solver: ", user.id != task.solver, "user.id ", user.id, "task.solver ", task.solver)
+    if (task.solver && (user.id != task.solver)) {
+      toastr.error("You do not have permission to this task")
+      this.props.history.push('/task')
     }
 
     return <div className='TaskDetail container'>
@@ -126,7 +139,7 @@ class TaskDetail extends Component {
               )
           }
           <div>
-            <TaskHistory windowHistory={windowHistory} />
+            <TaskHistory windowHistory={windowHistory} windowId={task.id} />
             {
               isTeacher
                 ? <Button style={{ marginTop: '5px', marginBottom: '5px' }}>{i18n('TaskDetail.teacher.evaluate', 'Evaluate')}</Button>

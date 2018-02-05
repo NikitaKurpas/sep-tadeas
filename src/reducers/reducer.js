@@ -13,7 +13,8 @@ import {
     FETCH_HISTORY_WINDOW_SUCCESS,
     PUSH_DELIVERY,
     PUSH_DELIVERY_SUCCESS,
-    LOGOUT_USER
+    LOGOUT_USER,
+    FETCH_USER
 } from "../actions/actions";
 
 const defaultState = {
@@ -61,7 +62,6 @@ export default function reducer(state = defaultState, action) {
             }
         case FETCH_DELIVERY_WINDOW_SUCCESS:
             var indexOfTask = state.tasks.findIndex(i => i.id == action.window.id)
-            console.log("indexOfTask", indexOfTask, "action.window:", action.window)
             return {
                 ...state,
                 activeWindowId: indexOfTask,
@@ -106,6 +106,11 @@ export default function reducer(state = defaultState, action) {
                     ...state.windowHistory,
                     action.delivery
                 ]
+            }
+        case FETCH_USER:
+            return {
+                ...state,
+                user: action.user
             }
         default:
             return state;

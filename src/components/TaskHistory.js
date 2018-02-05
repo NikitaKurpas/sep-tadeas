@@ -17,7 +17,7 @@ class TaskHistory extends Component {
 
     render() {
 
-        const { windowHistory } = this.props
+        const { windowHistory, windowId } = this.props
         return (
             <div style={styles.table}>
                 <Table >
@@ -28,15 +28,18 @@ class TaskHistory extends Component {
                             <th>{i18n('TaskDetail.TaskHistory.download', 'Download')}</th>
                         </tr>
                     </thead>
-                    {
-                        windowHistory.map(version => {
-                            return (
-                                <tr>
-                                {/*<td>{version.name}</td>*/}
-                                <td> {version.deliveryDate}</td><td><a>{i18n('TaskDetail.TaskHistory.download', 'Download').toLowerCase()}</a></td></tr>
-                            )
-                        })
-                    }
+                    <tbody>
+                        {
+                            windowHistory.map(version => {
+                                if (windowId === version.taskDeliveryWindow)
+                                    return (
+                                        <tr key={version.id}>
+                                            {/*<td>{version.name}</td>*/}
+                                            <td> {version.deliveryDate}</td><td><a>{i18n('TaskDetail.TaskHistory.download', 'Download').toLowerCase()}</a></td></tr>
+                                    )
+                            })
+                        }
+                    </tbody>
                 </Table>
             </div>
         )
