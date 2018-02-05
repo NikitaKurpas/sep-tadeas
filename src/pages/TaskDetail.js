@@ -81,7 +81,7 @@ class TaskDetail extends Component {
       return <div className="container">Loading...</div>
     }
 
-    if (task.solver && (user.id !== task.solver)) {
+    if (!isTeacher && task.solver && (user.id !== task.solver)) {
       toastr.error("You do not have permission to this task")
       this.props.history.push('/task')
     }
